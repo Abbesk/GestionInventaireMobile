@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.lazyPut(() =>AuthController() );
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'My App',
       theme: ThemeData(
         primarySwatch: Colors.blue,

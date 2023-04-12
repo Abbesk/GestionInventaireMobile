@@ -90,7 +90,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Visibility(
-                                visible: !isClotured,
+                                visible: isClotured,
                                 child: IconButton(
                                   icon: Icon(Icons.add),
                                   onPressed: () {
@@ -104,7 +104,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                                 ),
                               ),
                               Visibility(
-                                visible: !isClotured,
+                                visible: isClotured,
                                 child: IconButton(
                                   icon: Icon(Icons.edit),
                                   onPressed: () {
@@ -118,7 +118,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                                 ),
                               ),
                               Visibility(
-                                visible: !isClotured,
+                                visible: isClotured,
                                 child: IconButton(
                                   icon: Icon(Icons.edit),
                                   onPressed: () {
@@ -132,7 +132,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                                 ),
                               ),
                               Visibility(
-                                visible: isClotured,
+                                visible: !isClotured,
                                 child: IconButton(
                                   icon: Icon(Icons.edit),
                                   onPressed: () {

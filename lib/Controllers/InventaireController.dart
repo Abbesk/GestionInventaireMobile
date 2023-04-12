@@ -179,6 +179,36 @@ class InventaireController extends GetxController {
       throw Exception('Failed to update inventory: ${response.body}');
     }
   }
+  Future<String> getNouveauIndex() async {
+    final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
+    final response = await http.get(Uri.parse('http://localhost:44328/api/Inventaire/NouveauIndex'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Access-Control-Allow-Origin': '*', // This is the cross-origin header
+      },);
 
+    if (response.statusCode == 200) {
+      // the API call was successful
+      return json.decode(response.body);
+    } else {
+      // the API call failed
+      throw Exception('Failed to load nouveau index');
+    }
+  }
+  Future<void> CreerInventaire( Inventaire invphysique) async {
+    final url = 'http://localhost:44328/api/Inventaire';
+    final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
+    final encodedUrl = Uri.parse(url);
 
+    final response = await http.post(
+      encodedUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Access-Control-Allow-Origin': '*', // This is the cross-origin header
+      },
+      body: json.encode(invphysique.toJson()),
+    );
+  }
 }

@@ -4,6 +4,7 @@ import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/Inventaire.dart';
 import 'package:inventaire_mobile/Models/UserSoc.dart';
+import 'package:inventaire_mobile/Screens/CreateInventaireScreen.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import 'package:inventaire_mobile/Screens/LoginScreen.dart';
 class ChoisirSocieteScreen extends StatefulWidget {
@@ -74,7 +75,7 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
                             await _authController.choisirSociete(soc);
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => ListeInventairesScreen()),
+                              MaterialPageRoute(builder: (context) => CreateInventaireScreen()),
                             );
                           } catch (e) {
                             print(e);
