@@ -12,33 +12,26 @@ class ChoisirSocieteScreen extends StatefulWidget {
 }
 
 class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
-  final InventaireController _articleService = InventaireController();
+  final InventaireController _inventaireController = InventaireController();
   final AuthController _authController = AuthController();
-  List<UserSoc> _articles = [];
+  List<UserSoc> _societes = [];
   bool _isLoading = false;
   @override
   void initState() {
     super.initState();
-    _fetchArticles();
+    _fetchSocietes();
 
   }
-/*_deleteArticles(Article article) async {
-  void result = await _articleService.deleteArticle(article.reference)
-  if (result == 1) {
-    setState(() {
-      _articles.remove(article);
-    });
-  }
-}*/
-  _fetchArticles() async {
+
+  _fetchSocietes() async {
     setState(() {
       _isLoading = true;
     });
     try {
-      List<UserSoc> articles = await _articleService.fetchUserSocs();
+      List<UserSoc> societes = await _inventaireController.fetchUserSocs();
       setState(() {
         _isLoading = false;
-        _articles = articles;
+        _societes = societes;
       });
     } catch (e) {
       setState(() {
@@ -57,7 +50,7 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
     return Scaffold(
         resizeToAvoidBottomInset : false,
         appBar: AppBar(
-          title: Text("All Articles"),
+          title: Text("Choisir une société"),
         ),
         body: _isLoading
             ? const Center(
@@ -69,9 +62,9 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
               child: Container(
                 //width: 500,
                 child: ListView.builder(
-                  itemCount: _articles.length,
+                  itemCount: _societes.length,
                   itemBuilder: (context, index) {
-                    UserSoc article = _articles[index];
+                    UserSoc article = _societes[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
@@ -81,7 +74,7 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
                             await _authController.choisirSociete(soc);
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => ArticleListScreen()),
+                              MaterialPageRoute(builder: (context) => ListeInventairesScreen()),
                             );
                           } catch (e) {
                             print(e);

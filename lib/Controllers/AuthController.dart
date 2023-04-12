@@ -37,13 +37,7 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       // Handle network errors
-      Get.snackbar(
-        'Error',
-        'Network error',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+
       isLoggedIn.value = false;
       return false;
     }

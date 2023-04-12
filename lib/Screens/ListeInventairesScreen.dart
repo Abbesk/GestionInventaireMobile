@@ -2,40 +2,35 @@
 import 'package:flutter/material.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/Inventaire.dart';
-
+import 'package:inventaire_mobile/Screens/CloturerInventaireScreen.dart';
+import 'package:inventaire_mobile/Screens/SelectionnerArticlesScreen.dart';
+import 'package:inventaire_mobile/Screens/ComptagePhysiqueScreen.dart';
 import 'package:inventaire_mobile/Screens/LoginScreen.dart';
-class ArticleListScreen extends StatefulWidget {
+class ListeInventairesScreen extends StatefulWidget {
   @override
-  State<ArticleListScreen> createState() => _ArticleListScreenState();
+  State<ListeInventairesScreen> createState() => _ListeInventairesScreenState();
 }
 
-class _ArticleListScreenState extends State<ArticleListScreen> {
-  final InventaireController _articleService = InventaireController();
-  List<Inventaire> _articles = [];
+class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
+  final InventaireController _inventaireController = InventaireController();
+  List<Inventaire> _inventaires = [];
   bool _isLoading = false;
   @override
   void initState() {
     super.initState();
-    _fetchArticles();
+    _fetchInvs();
 
   }
-/*_deleteArticles(Article article) async {
-  void result = await _articleService.deleteArticle(article.reference)
-  if (result == 1) {
-    setState(() {
-      _articles.remove(article);
-    });
-  }
-}*/
-  _fetchArticles() async {
+
+  _fetchInvs() async {
     setState(() {
       _isLoading = true;
     });
     try {
-      List<Inventaire> articles = await _articleService.fetchInventaires();
+      final List<Inventaire> inventaires = await _inventaireController.fetchInventaires() ;
       setState(() {
         _isLoading = false;
-        _articles = articles;
+        _inventaires = inventaires;
       });
     } catch (e) {
       setState(() {
@@ -54,7 +49,7 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
     return Scaffold(
         resizeToAvoidBottomInset : false,
         appBar: AppBar(
-          title: Text("All Articles"),
+          title: Text("Liste des inventaires"),
         ),
         body: _isLoading
             ? const Center(
@@ -66,28 +61,65 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
               child: Container(
                 //width: 500,
                 child: ListView.builder(
-                  itemCount: _articles.length,
+                  itemCount: _inventaires.length,
                   itemBuilder: (context, index) {
-                    Inventaire article = _articles[index];
+                    Inventaire i = _inventaires[index];
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ListTile(
-                          // leading: Text(article.reference ?? ''),
                           title: Row(
                             children: [
-                              Expanded(child: Text("reference")),
-                              Expanded(child: Text("libelle")),
-                              Expanded(child: Text("description")),
-                              Expanded(child: Text("prix")),
+                              Expanded(child: Text("Numéro")),
+                              Expanded(child: Text("Date")),
+                              Expanded(child: Text("P_Vente")),
+                              Expanded(child: Text("Depot")),
                             ],
                           ),
                           subtitle: Row(
                             children: [
-                              Expanded(child: Text(article.numinv)),
-                              Expanded(child: Text(article.numinv)),
-                              Expanded(child: Text(article.codedep)),
-
+                              Expanded(child: Text(i.numinv!)),
+                              Expanded(child: Text(i.dateinv.toString()!)),
+                              Expanded(child: Text(i.libpv!)),
+                              Expanded(child: Text(i.libdep!)),
+                            ],
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.add),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SelectionnerArticleScreen(inventaire: i),
+                                    ),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ComptagePhysiqueScreen(inventaire: i),
+                                    ),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CloturerInventaireScreen(inventaire: i),
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),
@@ -95,10 +127,12 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
                     );
                   },
                 ),
+
               ),
             ),
           ],
         ),
+
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () => Navigator.push(
@@ -106,7 +140,7 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
             MaterialPageRoute(builder: (context) => login(),
             ),
           ),
-        )
+        ),
 
     );
   }

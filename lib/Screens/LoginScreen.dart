@@ -1,12 +1,10 @@
 import 'dart:convert';
-
-import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:inventaire_mobile/Screens/choisirSocieteScreen.dart';
+import 'package:inventaire_mobile/Controllers/AuthController.dart';
 
-import '../Controllers/AuthController.dart';
 
 
 

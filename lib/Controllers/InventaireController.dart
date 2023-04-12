@@ -9,6 +9,7 @@ import 'package:inventaire_mobile/Models/Inventaire.dart';
 import '../Models/UserSoc.dart';
 
 
+
 class InventaireController extends GetxController {
 
   final _inventaires = RxList<Inventaire>([]);
@@ -120,6 +121,64 @@ class InventaireController extends GetxController {
   }
 
 
+
+  Future<void> selectionnerArticles(String id, Inventaire invphysique) async {
+    final url = 'http://localhost:44328/api/Inventaire/SelectionnerArticles?id=$id';
+    final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
+    final encodedUrl = Uri.parse(url);
+
+    final response = await http.put(
+      encodedUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Access-Control-Allow-Origin': '*', // This is the cross-origin header
+      },
+      body: json.encode(invphysique.toJson()),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update inventory: ${response.body}');
+    }
+  }
+  Future<void> SaisiComptage(String id, Inventaire invphysique) async {
+    final url = 'http://localhost:44328/api/Inventaire/SaisirComptagePhysique?id=$id';
+    final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
+    final encodedUrl = Uri.parse(url);
+
+    final response = await http.put(
+      encodedUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Access-Control-Allow-Origin': '*', // This is the cross-origin header
+      },
+      body: json.encode(invphysique.toJson()),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update inventory: ${response.body}');
+    }
+  }
+  Future<void> CloturerInventaire(String id, Inventaire invphysique) async {
+    final url = 'http://localhost:44328/api/Inventaire/CloturerInventaire/?id=$id';
+    final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
+    final encodedUrl = Uri.parse(url);
+
+    final response = await http.put(
+      encodedUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Access-Control-Allow-Origin': '*', // This is the cross-origin header
+      },
+      body: json.encode(invphysique.toJson()),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update inventory: ${response.body}');
+    }
+  }
 
 
 }

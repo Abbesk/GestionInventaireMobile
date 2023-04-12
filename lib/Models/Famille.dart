@@ -6,18 +6,10 @@ class Famille {
 
 
   });
-  late final List<dynamic> Articles;
+  late  List<dynamic> Articles;
   late final String code;
-  late final String libelle;
-  late final String? achat;
-  late final String? vente;
-  late final int dispo;
-  late final String sav;
-  late final String immeuble;
-  late final Null position;
-  late final String? codepv;
-  late final String? libpv;
-  late final String favoris;
+  late  String? libelle;
+
 
   Famille.fromJson(Map<String, dynamic> json){
 
