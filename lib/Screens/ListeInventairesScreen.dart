@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/Inventaire.dart';
+import 'package:inventaire_mobile/Screens/AfficherLignesInventaire.dart';
 import 'package:inventaire_mobile/Screens/CloturerInventaireScreen.dart';
 import 'package:inventaire_mobile/Screens/SelectionnerArticlesScreen.dart';
 import 'package:inventaire_mobile/Screens/ComptagePhysiqueScreen.dart';
@@ -116,6 +117,17 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CloturerInventaireScreen(inventaire: i),
+                                    ),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AfficherLignesInventaireScreen(inventaire: i),
                                     ),
                                   );
                                 },

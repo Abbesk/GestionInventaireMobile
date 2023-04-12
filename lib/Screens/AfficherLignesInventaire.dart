@@ -5,9 +5,8 @@ import 'package:inventaire_mobile/Models/LigneInventaire.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 
 
-import '../Models/Depot.dart';
+
 import '../Models/Inventaire.dart';
-import '../Models/TMPLigneDepot.dart';
 
 
 
@@ -22,7 +21,6 @@ class AfficherLignesInventaireScreen extends StatefulWidget {
 
 class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventaireScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final InventaireController _inventaireRepository = InventaireController();
   late List<LigneInventaire> _lignesInventaire;
   String? _numinv;
   String? _codepv;
@@ -113,38 +111,19 @@ class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventair
                     columns: [
                       DataColumn(label: Text('Famille')),
                       DataColumn(label: Text('Code Article')),
-                      DataColumn(label: Text('Désignation')),
-                      DataColumn(label: Text('Quantitée physique')),
-                      DataColumn(label: Text('Justification')),
+                      DataColumn(label: Text('Lib')),
+                      DataColumn(label: Text('Qte_S')),
+                      DataColumn(label: Text('Ecart')),
                     ],
-                    rows: _tmpLignesDepot.map(
+                    rows: _lignesInventaire.map(
                           (ligne) => DataRow(
                         cells: [
                           DataCell(Text(ligne.famille!)),
                           DataCell(Text(ligne.codeart!)),
                           DataCell(Text(ligne.desart!)),
-                          DataCell(
-                            TextFormField(
-                              readOnly: true, // set to readOnly so it cannot be edited
-                              initialValue: ligne.qteInventaire.toString(),
+                          DataCell(Text(ligne.qtes.toString()!)),
+                          DataCell(Text(ligne.ecartinv.toString()!)),
 
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                              ),
-
-                            ),
-                          ),
-                          DataCell(
-                            TextFormField(
-                              readOnly: true, // set to readOnly so it cannot be edited
-                              initialValue: ligne.commentaire,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                              ),
-
-
-                            ),
-                          ),
                         ],
                       ),
                     ).toList(),
@@ -158,7 +137,7 @@ class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventair
               SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  _submitForm();
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -166,7 +145,7 @@ class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventair
                     ),
                   );
                 },
-                child: Text('Enregistrer'),
+                child: Text('Liste inventaires'),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.lightBlueAccent,
                   onPrimary: Colors.white,
