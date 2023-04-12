@@ -65,6 +65,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                   itemCount: _inventaires.length,
                   itemBuilder: (context, index) {
                     Inventaire i = _inventaires[index];
+                    bool isClotured = i.cloture == 1;
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -88,50 +89,61 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if(i.cloture==1)...{
-                              IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SelectionnerArticleScreen(inventaire: i),
-                                    ),
-                                  );
-                                },
-                              ),},
-                              IconButton(
-                                icon: Icon(Icons.edit),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ComptagePhysiqueScreen(inventaire: i),
-                                    ),
-                                  );
-                                },
+                              Visibility(
+                                visible: !isClotured,
+                                child: IconButton(
+                                  icon: Icon(Icons.add),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SelectionnerArticleScreen(inventaire: i),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              IconButton(
-                                icon: Icon(Icons.edit),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CloturerInventaireScreen(inventaire: i),
-                                    ),
-                                  );
-                                },
+                              Visibility(
+                                visible: !isClotured,
+                                child: IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ComptagePhysiqueScreen(inventaire: i),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              IconButton(
-                                icon: Icon(Icons.edit),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AfficherLignesInventaireScreen(inventaire: i),
-                                    ),
-                                  );
-                                },
+                              Visibility(
+                                visible: !isClotured,
+                                child: IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CloturerInventaireScreen(inventaire: i),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Visibility(
+                                visible: isClotured,
+                                child: IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AfficherLignesInventaireScreen(inventaire: i),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ],
                           ),
