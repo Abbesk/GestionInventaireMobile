@@ -88,6 +88,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              if(i.cloture==1)...{
                               IconButton(
                                 icon: Icon(Icons.add),
                                 onPressed: () {
@@ -98,7 +99,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                                     ),
                                   );
                                 },
-                              ),
+                              ),},
                               IconButton(
                                 icon: Icon(Icons.edit),
                                 onPressed: () {
@@ -145,14 +146,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
           ],
         ),
 
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => login(),
-            ),
-          ),
-        ),
+
 
     );
   }
