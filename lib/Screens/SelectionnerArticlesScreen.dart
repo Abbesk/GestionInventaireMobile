@@ -41,7 +41,96 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
         true,
         ScanMode.BARCODE
     );
+
+    if (barcode != null) {
+      LigneDepot? matchingLigne = _filteredLignesDepot.firstWhere(
+            (ligne) => ligne.libelle == barcode,
+
+      );
+
+      // Show confirmation dialog if matching ligne is found
+      if (matchingLigne != null) {
+        if (matchingLigne.isSelected == 1) {
+          await _showAlreadySelectedDialog(matchingLigne);
+        } else {
+          await _confirmSelection(matchingLigne);
+        }
+      }
+    }
+
     return barcode;
+  }
+  Future<void> _showAlreadySelectedDialog(LigneDepot ligne) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button to dismiss dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('L article ${ligne.codeart} est déjà sélectionné '),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Voulez vous le conserver?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Conserver'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Eleminer'),
+              onPressed: () {
+                setState(() {
+                  ligne.isSelected = 0;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _confirmSelection(LigneDepot ligne) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button to close dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Voulez vous ajouter cet article'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Voulez vous'),
+                Text('${ligne.libelle}'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Oui'),
+              onPressed: () {
+                setState(() {
+                  ligne.isSelected = 1;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Non'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
   @override
   void initState() {
@@ -149,16 +238,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                 child: Text('Scan Barcode'),
                 onPressed: () async {
                   String? barcode = await scanBarcode();
-                  if (barcode != null) {
-                    for (var ligne in _lignesdepot) {
-                      if (ligne.article?.codebarre == barcode) {
-                        setState(() {
-                          ligne.isSelected = 1;
-                        });
-                        break;
-                      }
-                    }
-                  }
+
                 },
               ),
               SizedBox(height: 16.0),
