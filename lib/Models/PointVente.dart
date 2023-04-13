@@ -5,17 +5,17 @@ class PointVente {
 
 
     required this.Code,
-    required this.Libelle,
+     this.Libelle,
 
-    required this.Responsable,
+     this.Responsable,
 
-    required this.depots
+     this.depots
   });
-  late final List<dynamic> depots;
+  late  List<dynamic>? depots;
   late final String Code;
-  late final String Libelle;
+  late  String? Libelle;
 
-  late final String? Responsable;
+    String? Responsable;
 
 
   PointVente.fromJson(Map<String, dynamic> json){
@@ -28,7 +28,7 @@ class PointVente {
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['Depots'] = depots.map((e)=>e.toJson()).toList();
+    _data['Depots'] = depots?.map((e)=>e.toJson()).toList();
     _data['Code'] = Code;
     _data['Libelle'] = Libelle;
     _data['Responsable'] = Responsable;

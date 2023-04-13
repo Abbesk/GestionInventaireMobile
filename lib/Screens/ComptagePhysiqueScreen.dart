@@ -165,7 +165,7 @@ class _ComptagePhysiqueScreenState extends State<ComptagePhysiqueScreen> {
                                   } else {
                                     double parsedValue = double.tryParse(value)!;
                                     if (parsedValue != null && parsedValue > 0) {
-                                      ligne.qteInventaire = parsedValue as int?;
+                                      ligne.qteInventaire = parsedValue;
                                     } else {
                                       ligne.qteInventaire = 0;
                                     }

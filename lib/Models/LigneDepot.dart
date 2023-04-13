@@ -27,7 +27,7 @@ class LigneDepot {
   late final String famille;
   late final double? qteart;
 
-  late final double qteres;
+  late final double? qteres;
   late final String? numfourn;
   late final String? libfourn;
   late final String? datderninv;

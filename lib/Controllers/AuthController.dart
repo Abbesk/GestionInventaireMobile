@@ -13,7 +13,7 @@ class AuthController extends GetxController {
   Future<bool> login(String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:44328/api/Utilisateur/login'),
+        Uri.parse('https://6181-102-157-137-155.ngrok-free.app/api/Utilisateur/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'codeuser': email, 'motpasse': password}),
       );
@@ -53,7 +53,7 @@ class AuthController extends GetxController {
   Future<void> choisirSociete(String soc) async {
 
     final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-    final url = 'http://localhost:44328/Api/Utilisateur/ChoisirSociete?soc=';
+    final url = 'https://6181-102-157-137-155.ngrok-free.app/Api/Utilisateur/ChoisirSociete?soc=';
     final encodedUrl = Uri.parse(url + soc!); // added token to the url
     final response = await http.post(
       encodedUrl,

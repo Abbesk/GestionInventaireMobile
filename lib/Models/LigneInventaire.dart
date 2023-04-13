@@ -33,10 +33,10 @@ class LigneInventaire {
   late final String dateInv;
   late final String codeart;
   late final String desart;
-  late final int qtes;
-  late final int stockinv;
-  late final int ecartinv;
-  late final int PUART;
+  late final double qtes;
+  late final double? stockinv;
+  late final double? ecartinv;
+  late final double PUART;
 
   late final String famille;
   late final String libellefourn;
@@ -48,8 +48,8 @@ class LigneInventaire {
   late final String libdep;
   late final String codepv;
   late final String libpv;
-  late final int eecart;
-  late final int secart;
+  late final double? eecart;
+  late final double? secart;
 
 
   LigneInventaire.fromJson(Map<String, dynamic> json){

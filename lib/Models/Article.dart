@@ -14,7 +14,7 @@ class Article {
 
   late final String code;
   late  String libelle;
-  late  int puht ;
+  late  double puht ;
 late String? codebarre;
   late  String fam;
 

@@ -15,6 +15,7 @@ class ListeInventairesScreen extends StatefulWidget {
 class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
   final InventaireController _inventaireController = InventaireController();
   List<Inventaire> _inventaires = [];
+  late Inventaire i1 ;
   bool _isLoading = false;
   @override
   void initState() {
@@ -90,14 +91,15 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Visibility(
-                                visible: isClotured,
+                                visible: !isClotured,
                                 child: IconButton(
                                   icon: Icon(Icons.add),
-                                  onPressed: () {
+                                  onPressed: () async {
+                                     i1 = await _inventaireController.getInventaireById(i.numinv!) as Inventaire ;
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => SelectionnerArticleScreen(inventaire: i),
+                                        builder: (context) => SelectionnerArticleScreen(inventaire: i1),
                                       ),
                                     );
                                   },

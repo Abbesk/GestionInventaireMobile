@@ -75,7 +75,7 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
                             await _authController.choisirSociete(soc);
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => CreateInventaireScreen()),
+                              MaterialPageRoute(builder: (context) => ListeInventairesScreen()),
                             );
                           } catch (e) {
                             print(e);

@@ -28,7 +28,7 @@ class TMPLigneDepot {
    String? famille;
    String? codeart;
    String? desart;
-   int? qteart;
+   double? qteart;
    String? lieustock;
    String? Datderninv;
 
@@ -39,10 +39,10 @@ class TMPLigneDepot {
    String? libelle;
    String? nordre;
    String? numinv;
-   int? puht;
+   double? puht;
    int? isSelected;
    String? codepv;
-   int? qteInventaire;
+   double? qteInventaire;
    String? commentaire;
 
   TMPLigneDepot.fromJson(Map<String, dynamic> json){

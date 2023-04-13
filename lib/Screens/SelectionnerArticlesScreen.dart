@@ -46,6 +46,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
   @override
   void initState() {
     super.initState();
+    _inventaireRepository.fetchInventaires();
     _countController.text = (widget.inventaire.depot?.lignesDepot?.length).toString();
     _numinv = widget.inventaire.numinv;
     _codepv = widget.inventaire.codepv;

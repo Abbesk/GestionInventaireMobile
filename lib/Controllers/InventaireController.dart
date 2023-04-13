@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:inventaire_mobile/Models/Depot.dart';
 import 'package:inventaire_mobile/Models/Inventaire.dart';
+import 'package:inventaire_mobile/Models/PointVente.dart';
 
 import '../Models/UserSoc.dart';
 
@@ -13,8 +16,13 @@ import '../Models/UserSoc.dart';
 class InventaireController extends GetxController {
 
   final _inventaires = RxList<Inventaire>([]);
+  final _pvs = RxList<PointVente>([]);
+  final _deps = RxList<Depot>([]);
   final _usersocs = RxList<UserSoc>([]);
+  int? responseCode;
+
   RxList<Inventaire> get inventaires => _inventaires;
+
   RxList<UserSoc> get usersocs => _usersocs;
   final storage = FlutterSecureStorage();
 
@@ -32,12 +40,13 @@ class InventaireController extends GetxController {
       'Access-Control-Allow-Origin': '*', // This is the cross-origin header
     };
   }
+
   //http://localhost:44328/Api/SocieteUser/GetusersocParUser?codeuser=
   Future<List<UserSoc>> fetchUserSocs() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
       final codeuser = (await storage.read(key: "codeuser"));
-      final url = 'http://localhost:44328/Api/SocieteUser/GetusersocParUser?codeuser=';
+      final url = 'https://6181-102-157-137-155.ngrok-free.app/Api/SocieteUser/GetusersocParUser?codeuser=';
       final encodedUrl = Uri.parse(url + codeuser!); // added token to the url
       final response = await http.get(
         encodedUrl,
@@ -65,13 +74,10 @@ class InventaireController extends GetxController {
   }
 
 
-
-
-
   Future<List<Inventaire>> fetchInventaires() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'http://localhost:44328/api/Inventaire/GetInventaires';
+      final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/GetInventaires';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -84,12 +90,14 @@ class InventaireController extends GetxController {
       if (response.statusCode == 200) {
         final Iterable jsonList = json.decode(response.body);
         _inventaires.clear();
-        _inventaires.addAll(jsonList.map((model) => Inventaire.fromJson(model)));
+        _inventaires.addAll(
+            jsonList.map((model) => Inventaire.fromJson(model)));
         return _inventaires;
       } else if (response.statusCode == 401) {
         // Handle authentication errors
         print('Failed to fetch inventaires due to authentication error');
-        throw Exception('Authentication error occurred while fetching inventaires');
+        throw Exception(
+            'Authentication error occurred while fetching inventaires');
       } else if (response.statusCode == 404) {
         // Handle not found errors
         print('Failed to fetch inventaires. Reason: ${response.reasonPhrase}');
@@ -97,7 +105,8 @@ class InventaireController extends GetxController {
       } else if (response.statusCode >= 500 && response.statusCode < 600) {
         // Handle server errors
         final errorMessage = response.reasonPhrase ?? 'Unknown error';
-        print('Failed to fetch inventaires due to server error. Reason: $errorMessage');
+        print(
+            'Failed to fetch inventaires due to server error. Reason: $errorMessage');
         throw Exception('Server error occurred while fetching inventaires');
       } else {
         // Handle other errors
@@ -121,9 +130,8 @@ class InventaireController extends GetxController {
   }
 
 
-
   Future<void> selectionnerArticles(String id, Inventaire invphysique) async {
-    final url = 'http://localhost:44328/api/Inventaire/SelectionnerArticles?id=$id';
+    final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/SelectionnerArticles?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -141,8 +149,9 @@ class InventaireController extends GetxController {
       throw Exception('Failed to update inventory: ${response.body}');
     }
   }
+
   Future<void> SaisiComptage(String id, Inventaire invphysique) async {
-    final url = 'http://localhost:44328/api/Inventaire/SaisirComptagePhysique?id=$id';
+    final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/SaisirComptagePhysique?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -160,11 +169,11 @@ class InventaireController extends GetxController {
       throw Exception('Failed to update inventory: ${response.body}');
     }
   }
+
   Future<void> CloturerInventaire(String id, Inventaire invphysique) async {
-    final url = 'http://localhost:44328/api/Inventaire/CloturerInventaire/?id=$id';
+    final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/CloturerInventaire/?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
-
     final response = await http.put(
       encodedUrl,
       headers: {
@@ -179,9 +188,11 @@ class InventaireController extends GetxController {
       throw Exception('Failed to update inventory: ${response.body}');
     }
   }
+
   Future<String> getNouveauIndex() async {
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
-    final response = await http.get(Uri.parse('http://localhost:44328/api/Inventaire/NouveauIndex'),
+    final response = await http.get(
+      Uri.parse('https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/NouveauIndex'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -196,8 +207,9 @@ class InventaireController extends GetxController {
       throw Exception('Failed to load nouveau index');
     }
   }
-  Future<void> CreerInventaire( Inventaire invphysique) async {
-    final url = 'http://localhost:44328/api/Inventaire';
+
+  Future<void> CreerInventaire(Inventaire invphysique) async {
+    final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Inventaire';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -210,5 +222,94 @@ class InventaireController extends GetxController {
       },
       body: json.encode(invphysique.toJson()),
     );
+    responseCode = response.statusCode;
+
+    if (response.statusCode == 403) {
+      print('HTTP error: ${response.statusCode}');
+
+    } else {
+      // Handle success case here
+      print('HTTP success: ${response.statusCode}');
+    }
   }
+
+
+  Future<List<PointVente>> getAllPVS() async {
+    try {
+      final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
+      final url = 'https://6181-102-157-137-155.ngrok-free.app/api/PointVente';
+      final encodedUrl = Uri.encodeFull(url);
+      final response = await http.get(
+        Uri.parse(encodedUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+          'Access-Control-Allow-Origin': '*', // This is the cross-origin header
+        },
+      );
+      if (response.statusCode == 200) {
+        final Iterable jsonList = json.decode(response.body);
+        _pvs.clear();
+        _pvs.addAll(
+            jsonList.map((model) => PointVente.fromJson(model)));
+        return _pvs;
+      } else {
+        // Handle authentication errors
+        print('Failed to fetch point de ventes due to authentication error');
+        throw Exception(
+            'Authentication error occurred while fetching point de ventes');
+      }
+    } catch (e) {
+      print('Failed to fetch point de ventes due to ${e.toString()}');
+      throw Exception('Failed to fetch point de ventes due to ${e.toString()}');
+    }
+  }
+  Future<List<Depot>> getAllDeps() async {
+    try {
+      final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
+      final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Depot';
+      final encodedUrl = Uri.encodeFull(url);
+      final response = await http.get(
+        Uri.parse(encodedUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+          'Access-Control-Allow-Origin': '*', // This is the cross-origin header
+        },
+      );
+      if (response.statusCode == 200) {
+        final Iterable jsonList = json.decode(response.body);
+        _deps.clear();
+        _deps.addAll(
+            jsonList.map((model) => Depot.fromJson(model)));
+        return _deps;
+      } else {
+        // Handle authentication errors
+        print('Failed to fetch point de ventes due to authentication error');
+        throw Exception(
+            'Authentication error occurred while fetching point de ventes');
+      }
+    } catch (e) {
+      print('Failed to fetch point de ventes due to ${e.toString()}');
+      throw Exception('Failed to fetch point de ventes due to ${e.toString()}');
+    }
+  }
+  Future<Inventaire> getInventaireById(String id) async {
+    final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
+    final response = await http.get(Uri.parse('https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/GetInventaireById/?id=$id') ,headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $token',
+    'Access-Control-Allow-Origin': '*', // This is the cross-origin header
+    },);
+
+    if (response.statusCode == 200) {
+      // If the call to the server was successful, parse the JSON.
+      return Inventaire.fromJson(jsonDecode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load inventaire by ID');
+    }
+  }
+
 }
+
