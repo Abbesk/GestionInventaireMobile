@@ -46,7 +46,7 @@ class InventaireController extends GetxController {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
       final codeuser = (await storage.read(key: "codeuser"));
-      final url = 'https://6181-102-157-137-155.ngrok-free.app/Api/SocieteUser/GetusersocParUser?codeuser=';
+      final url = 'http://localhost:44328/Api/SocieteUser/GetusersocParUser?codeuser=';
       final encodedUrl = Uri.parse(url + codeuser!); // added token to the url
       final response = await http.get(
         encodedUrl,
@@ -77,7 +77,7 @@ class InventaireController extends GetxController {
   Future<List<Inventaire>> fetchInventaires() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/GetInventaires';
+      final url = 'http://localhost:44328/api/Inventaire/GetInventaires';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -131,7 +131,7 @@ class InventaireController extends GetxController {
 
 
   Future<void> selectionnerArticles(String id, Inventaire invphysique) async {
-    final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/SelectionnerArticles?id=$id';
+    final url = 'http://localhost:44328/api/Inventaire/SelectionnerArticles?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -151,7 +151,7 @@ class InventaireController extends GetxController {
   }
 
   Future<void> SaisiComptage(String id, Inventaire invphysique) async {
-    final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/SaisirComptagePhysique?id=$id';
+    final url = 'http://localhost:44328/api/Inventaire/SaisirComptagePhysique?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -171,7 +171,7 @@ class InventaireController extends GetxController {
   }
 
   Future<void> CloturerInventaire(String id, Inventaire invphysique) async {
-    final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/CloturerInventaire/?id=$id';
+    final url = 'http://localhost:44328/api/Inventaire/CloturerInventaire/?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
     final response = await http.put(
@@ -192,7 +192,7 @@ class InventaireController extends GetxController {
   Future<String> getNouveauIndex() async {
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final response = await http.get(
-      Uri.parse('https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/NouveauIndex'),
+      Uri.parse('http://localhost:44328/api/Inventaire/NouveauIndex'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -209,7 +209,7 @@ class InventaireController extends GetxController {
   }
 
   Future<void> CreerInventaire(Inventaire invphysique) async {
-    final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Inventaire';
+    final url = 'http://localhost:44328/api/Inventaire';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -237,7 +237,7 @@ class InventaireController extends GetxController {
   Future<List<PointVente>> getAllPVS() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://6181-102-157-137-155.ngrok-free.app/api/PointVente';
+      final url = 'http://localhost:44328/api/PointVente';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -267,7 +267,7 @@ class InventaireController extends GetxController {
   Future<List<Depot>> getAllDeps() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://6181-102-157-137-155.ngrok-free.app/api/Depot';
+      final url = 'http://localhost:44328/api/Depot';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -296,7 +296,7 @@ class InventaireController extends GetxController {
   }
   Future<Inventaire> getInventaireById(String id) async {
     final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-    final response = await http.get(Uri.parse('https://6181-102-157-137-155.ngrok-free.app/api/Inventaire/GetInventaireById/?id=$id') ,headers: {
+    final response = await http.get(Uri.parse('http://localhost:44328/api/Inventaire/GetInventaireById/?id=$id') ,headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $token',
     'Access-Control-Allow-Origin': '*', // This is the cross-origin header

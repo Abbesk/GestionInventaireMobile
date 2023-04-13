@@ -188,7 +188,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
           depot: Depot(
             Code: _codedep!,
             codepv: _codepv!,
-            lignesDepot: _lignesdepot!,
+            lignesDepot: _lignesdepot,
           ),
         );
         await _inventaireRepository.selectionnerArticles(
@@ -304,10 +304,10 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                       _filteredLignesDepot.length,
                           (index) {
                         final ligne = _lignesdepot[index];
-                        final isChecked = _checkboxStates[index];
+
                         return DataRow(
                           cells: [
-                            DataCell(Text(ligne.codeart!)),
+                            DataCell(Text(ligne.codeart)),
                             DataCell(Text(ligne.qteart.toString())),
                             DataCell(Text(ligne.famille!)),
                             DataCell(
@@ -352,8 +352,8 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                 },
                 child: Text('Enregistrer'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.lightBlueAccent,
-                  onPrimary: Colors.white,
+                  backgroundColor: Colors.lightBlueAccent,
+                  foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
