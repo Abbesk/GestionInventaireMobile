@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 
@@ -7,6 +8,7 @@ import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import '../Models/Depot.dart';
 import '../Models/Inventaire.dart';
 import '../Models/TMPLigneDepot.dart';
+import 'aa.dart';
 
 
 
@@ -26,7 +28,7 @@ class _ComptagePhysiqueScreenState extends State<ComptagePhysiqueScreen> {
   String? _numinv;
   String? _codepv;
   String? _codedep;
-
+AuthController _authController = AuthController();
   @override
   void initState() {
     super.initState();
@@ -72,8 +74,22 @@ class _ComptagePhysiqueScreenState extends State<ComptagePhysiqueScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Saisir comptage physique'),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.blueGrey[900],
+        title: Text("Comptage physique des articles "),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              _authController.logout();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginPage(),
+                ),
+              );// call the logout function and pass in the BuildContext of the current screen
+            },
+          ),
+        ],
       ),
       body: Form(
         key: _formKey,
@@ -210,8 +226,8 @@ class _ComptagePhysiqueScreenState extends State<ComptagePhysiqueScreen> {
                 },
                 child: Text('Enregistrer'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.lightBlueAccent,
-                  onPrimary: Colors.white,
+                  backgroundColor: Colors.blueGrey[900],
+                  foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),

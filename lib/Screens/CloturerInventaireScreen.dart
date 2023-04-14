@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 
@@ -7,6 +8,7 @@ import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import '../Models/Depot.dart';
 import '../Models/Inventaire.dart';
 import '../Models/TMPLigneDepot.dart';
+import 'aa.dart';
 
 
 
@@ -26,7 +28,7 @@ class _CloturerInventaireScreenState extends State<CloturerInventaireScreen> {
   String? _numinv;
   String? _codepv;
   String? _codedep;
-
+AuthController _authController = AuthController();
   @override
   void initState() {
     super.initState();
@@ -72,8 +74,22 @@ class _CloturerInventaireScreenState extends State<CloturerInventaireScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Cloturer inventaire'),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.blueGrey[900],
+        title: Text("Cloturer l'inventaire"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              _authController.logout();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginPage(),
+                ),
+              );// call the logout function and pass in the BuildContext of the current screen
+            },
+          ),
+        ],
       ),
       body: Form(
         key: _formKey,
@@ -194,8 +210,8 @@ class _CloturerInventaireScreenState extends State<CloturerInventaireScreen> {
                 },
                 child: Text('Enregistrer'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.lightBlueAccent,
-                  onPrimary: Colors.white,
+                  backgroundColor: Colors.blueGrey[900],
+                  foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),

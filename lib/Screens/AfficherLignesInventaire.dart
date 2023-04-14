@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/LigneInventaire.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
@@ -7,6 +8,7 @@ import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 
 
 import '../Models/Inventaire.dart';
+import 'aa.dart';
 
 
 
@@ -25,7 +27,7 @@ class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventair
   String? _numinv;
   String? _codepv;
   String? _codedep;
-
+AuthController _authController = AuthController();
   @override
   void initState() {
     super.initState();
@@ -44,8 +46,22 @@ class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventair
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Liste des inventaires '),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.blueGrey[900],
+        title: Text("Liste des inventaires"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              _authController.logout();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginPage(),
+                ),
+              );// call the logout function and pass in the BuildContext of the current screen
+            },
+          ),
+        ],
       ),
 
 

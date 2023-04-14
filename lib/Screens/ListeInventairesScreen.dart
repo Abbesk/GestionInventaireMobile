@@ -9,6 +9,8 @@ import 'package:inventaire_mobile/Screens/SelectionnerArticlesScreen.dart';
 import 'package:inventaire_mobile/Screens/ComptagePhysiqueScreen.dart';
 import 'package:inventaire_mobile/Screens/LoginScreen.dart';
 import 'package:inventaire_mobile/Screens/aa.dart';
+
+import 'CreateInventaireScreen.dart';
 class ListeInventairesScreen extends StatefulWidget {
   @override
   State<ListeInventairesScreen> createState() => _ListeInventairesScreenState();
@@ -124,21 +126,21 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Icon(
-                      Icons.home_filled,
+                      Icons.add,
                       color: Colors.blueGrey[900],
                       size: 12.0,
                     ),
                   ),
                 ),
                 title: Text(
-                  'Page principale',
+                  'Liste des inventaires',
                   style: TextStyle(color: Colors.white),
                 ),
                 onTap: () {
                   // Navigate to the main page
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
+                    MaterialPageRoute(builder: (context) => CreateInventaireScreen()),);
                 },
               ),
               ListTile(
@@ -147,14 +149,14 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                   color: Colors.white,
                 ),
                 title: Text(
-                  'Commandes validées',
+                  'Créer un inventaire',
                   style: TextStyle(color: Colors.white),
                 ),
                 onTap: () {
                   // Navigate to the validated orders page
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
+                    MaterialPageRoute(builder: (context) => CreateInventaireScreen()),);
                 },
               ),
               ListTile(
@@ -188,7 +190,11 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
         itemCount: _inventaires.length,
         itemBuilder: (context, index) {
           Inventaire i = _inventaires[index];
-          bool isClotured = i.cloture == 1;
+          bool isClotured=true;
+          if(i.cloture == "0"){
+            isClotured=false;
+          }
+
           return ListTile(
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.start, // aligns children to the start of the row
@@ -227,7 +233,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                   ),
                 ),
                 Visibility(
-                  visible: isClotured,
+                  visible: !isClotured,
                   child: IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
@@ -241,7 +247,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                   ),
                 ),
                 Visibility(
-                  visible: isClotured,
+                  visible: !isClotured,
                   child: IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
@@ -255,7 +261,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                   ),
                 ),
                 Visibility(
-                  visible: !isClotured,
+                  visible: isClotured,
                   child: IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {

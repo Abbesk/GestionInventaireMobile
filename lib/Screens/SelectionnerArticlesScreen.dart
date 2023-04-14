@@ -3,11 +3,15 @@
 import 'dart:typed_data';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/material.dart';
+import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Models/Depot.dart';
+import 'package:inventaire_mobile/Screens/CreateInventaireScreen.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import 'package:inventaire_mobile/Models/Inventaire.dart';
 import 'package:inventaire_mobile/Models/LigneDepot.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
+
+import 'aa.dart';
 
 
 
@@ -33,7 +37,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
   late List<LigneDepot> _filteredLignesDepot;
   late List<bool> _checkboxStates;
   int selectedLineCount = 0;
-
+  AuthController _authController = AuthController();
   Future<String?> scanBarcode() async {
     String barcode = await FlutterBarcodeScanner.scanBarcode(
         '#FF0000',
@@ -213,8 +217,22 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Selectionner les  articles pour inventaire   "' +_numinv.toString() +'"'),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.blueGrey[900],
+        title: Text("Liste des inventaires"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              _authController.logout();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginPage(),
+                ),
+              );// call the logout function and pass in the BuildContext of the current screen
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         child: Container(
@@ -292,14 +310,14 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                   color: Colors.white,
                 ),
                 title: Text(
-                  'Commandes validées',
+                  'Créer un inventaire',
                   style: TextStyle(color: Colors.white),
                 ),
                 onTap: () {
                   // Navigate to the validated orders page
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
+                    MaterialPageRoute(builder: (context) => CreateInventaireScreen()),);
                 },
               ),
               ListTile(
@@ -472,7 +490,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                 },
                 child: Text('Enregistrer'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Colors.blueGrey[900],
                   foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   shape: RoundedRectangleBorder(
