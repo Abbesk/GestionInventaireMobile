@@ -44,10 +44,15 @@ class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventair
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Cloturer inventaire'),
+        title: Text('Liste des inventaires '),
         backgroundColor: Colors.lightBlueAccent,
       ),
-      body: Form(
+
+
+
+
+
+    body: Form(
         key: _formKey,
         child: Padding(
           padding: EdgeInsets.all(16.0),

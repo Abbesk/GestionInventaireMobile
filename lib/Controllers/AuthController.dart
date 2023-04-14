@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:js';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:get/get.dart';
@@ -69,6 +70,18 @@ class AuthController extends GetxController {
       print('Failed to fetch inventaires due to unexpected error. Reason: ');
     }
   }
+
+
+  Future<void> logout() async {
+    final response = await http.post(Uri.parse('http://localhost:44328/Api/Utilisateur/Logout'));
+
+    if (response.statusCode == 200) {
+
+    } else {
+      print("erreur logout");
+    }
+  }
+
 
 }
 //final token = (await storage.read(key: "jwt_token"))

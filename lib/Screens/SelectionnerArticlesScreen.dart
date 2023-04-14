@@ -216,6 +216,113 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
         title: Text('Selectionner les  articles pour inventaire   "' +_numinv.toString() +'"'),
         backgroundColor: Colors.lightBlueAccent,
       ),
+      drawer: Drawer(
+        child: Container(
+          color: Colors.blueGrey[900], // Set the background color
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    Text(
+                      'Historique',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 4,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: Image.network(
+                            'https://cdn-icons-png.flaticon.com/128/2682/2682065.png',
+                            fit: BoxFit.cover,
+                            height: 80,
+                            width: 80,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.home_filled,
+                      color: Colors.blueGrey[900],
+                      size: 12.0,
+                    ),
+                  ),
+                ),
+                title: Text(
+                  'Page principale',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  // Navigate to the main page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.check_circle_outline_rounded,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Commandes validées',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  // Navigate to the validated orders page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.cancel_outlined,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Commandes annulées',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  // Navigate to the cancelled orders page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
+                },
+              ),
+
+            ],
+          ),
+        ),
+      ),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -223,6 +330,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Numéro inventaire TextFormField
               TextFormField(
                 initialValue: _numinv,
                 enabled: false,
@@ -234,14 +342,19 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                   return null;
                 },
                 onSaved: (value) => _numinv = value!,
-              ),MaterialButton(
+              ),
+
+              // Scan Barcode Button
+              MaterialButton(
                 child: Text('Scan Barcode'),
                 onPressed: () async {
                   String? barcode = await scanBarcode();
-
                 },
               ),
+
               SizedBox(height: 16.0),
+
+              // Point de vente TextFormField
               TextFormField(
                 initialValue: _codepv,
                 enabled: false,
@@ -254,7 +367,10 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                 },
                 onSaved: (value) => _codepv = value!,
               ),
+
               SizedBox(height: 16.0),
+
+              // Depot TextFormField
               TextFormField(
                 enabled: false,
                 initialValue: _codedep,
@@ -267,7 +383,10 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                 },
                 onSaved: (value) => _codedep = value!,
               ),
+
               SizedBox(height: 16.0),
+
+              // Nombre Total Des Articles TextField
               TextField(
                 enabled: false,
                 controller: _countController,
@@ -275,9 +394,10 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                 keyboardType: TextInputType.number,
                 readOnly: true,
               ),
+
               SizedBox(height: 16.0),
 
-
+              // Liste des articles Text
               Center(
                 child: Text(
                   'Liste des articles',
@@ -289,7 +409,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                 ),
               ),
 
-// Tableau pour afficher les lignes de dépôt
+              // DataTable to display depot lines
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
