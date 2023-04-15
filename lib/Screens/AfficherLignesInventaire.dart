@@ -4,6 +4,8 @@ import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/LigneInventaire.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
+import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -47,7 +49,7 @@ AuthController _authController = AuthController();
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[900],
-        title: Text("Liste des inventaires"),
+        title: Text("Lignes inventaires"),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -61,13 +63,21 @@ AuthController _authController = AuthController();
               );// call the logout function and pass in the BuildContext of the current screen
             },
           ),
+          Consumer<ThemeModel>(
+            builder: (context, themeNotifier, child) {
+              return IconButton(
+
+                icon: Icon(themeNotifier.isDark ? Icons.nightlight_round : Icons.wb_sunny,
+                  color: themeNotifier.isDark ? Colors.white : Colors.white,
+                ),
+                onPressed: () {
+                  themeNotifier.isDark = !themeNotifier.isDark;
+                },
+              );
+            },
+          ),
         ],
       ),
-
-
-
-
-
     body: Form(
         key: _formKey,
         child: Padding(

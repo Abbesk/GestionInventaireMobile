@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'app_color.dart';
 
@@ -11,11 +13,11 @@ ThemeData darkTheme = ThemeData(
     headline1: TextStyle(
       color: Colors.white,
       fontSize: 40,
-      fontWeight: FontWeight.bold
-    )
+      fontWeight: FontWeight.bold,
+    ),
   ),
   buttonTheme: ButtonThemeData(
     textTheme: ButtonTextTheme.primary,
     buttonColor: Colors.white
-  )
+  ),
 );

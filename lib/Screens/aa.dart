@@ -96,6 +96,16 @@ class _LoginPageState extends State<LoginPage> {
                     Column(
                       children: [
                         ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColorLight),
+                            padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 0.5, vertical: 5.0)),
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: Theme.of(context).primaryColorLight),
+                              ),
+                            ),
+                          ),
                           onPressed: () async {
                             bool success = await authController.login(
                               emailController.text,
@@ -108,13 +118,17 @@ class _LoginPageState extends State<LoginPage> {
                               );
                             }
                           },
-                          child: Center(
-                            child: Text(
-                              "Login",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Center(
+                              child: Text(
+                                "Se connecter",
+                                style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: size.width * 0.05,),
+                              ),
                             ),
                           ),
                         ),
+
                         SizedBox(height: 30,),
 
                       ],

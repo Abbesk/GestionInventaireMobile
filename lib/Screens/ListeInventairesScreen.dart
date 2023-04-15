@@ -9,6 +9,9 @@ import 'package:inventaire_mobile/Screens/SelectionnerArticlesScreen.dart';
 import 'package:inventaire_mobile/Screens/ComptagePhysiqueScreen.dart';
 import 'package:inventaire_mobile/Screens/LoginScreen.dart';
 import 'package:inventaire_mobile/Screens/aa.dart';
+import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import 'CreateInventaireScreen.dart';
 class ListeInventairesScreen extends StatefulWidget {
@@ -17,6 +20,7 @@ class ListeInventairesScreen extends StatefulWidget {
 }
 
 class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
+
   final InventaireController _inventaireController = InventaireController();
   final AuthController _authController= AuthController() ;
   List<Inventaire> _inventaires = [];
@@ -71,6 +75,19 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
               );// call the logout function and pass in the BuildContext of the current screen
             },
           ),
+                Consumer<ThemeModel>(
+              builder: (context, themeNotifier, child) {
+                return IconButton(
+
+                  icon: Icon(themeNotifier.isDark ? Icons.nightlight_round : Icons.wb_sunny,
+                color: themeNotifier.isDark ? Colors.white : Colors.white,
+                ),
+                onPressed: () {
+                themeNotifier.isDark = !themeNotifier.isDark;
+                },
+                );
+                },
+        ),
         ],
       ),
       drawer: Drawer(
@@ -209,7 +226,12 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
               crossAxisAlignment: CrossAxisAlignment.start, // aligns children to the start of the row
               children: [
                 Expanded(child: Text(i.numinv!)),
-                Expanded(child: Text(i.dateinv.toString()!)),
+                Expanded(
+                  child: Text(
+                    DateFormat('dd/MM/yy').format(DateTime.parse(i.dateinv!)),
+                  ),
+                ),
+
                 Expanded(child: Text(i.libpv!)),
                 Expanded(child: Text(i.libdep!)),
               ],
@@ -280,6 +302,9 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
         },
       ),
     );
+
+
+
   }
 }
 
