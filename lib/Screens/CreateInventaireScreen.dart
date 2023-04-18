@@ -1,8 +1,8 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/Depot.dart';
-import 'package:inventaire_mobile/Screens/ErreurCreationScreen.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
 import 'package:provider/provider.dart';
@@ -87,13 +87,23 @@ late  bool theme_d ;
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
-              _authController.logout();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ),
-              );// call the logout function and pass in the BuildContext of the current screen
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.warning,
+                animType: AnimType.bottomSlide,
+                title: 'Confirm Logout',
+                desc: 'Are you sure you want to log out?',
+                btnCancelOnPress: () {},
+                btnOkOnPress: () {
+                  _authController.logout();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ),
+                  );
+                },
+              )..show();
             },
           ),
           Consumer<ThemeModel>(

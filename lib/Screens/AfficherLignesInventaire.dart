@@ -10,7 +10,10 @@ import 'package:provider/provider.dart';
 
 
 import '../Models/Inventaire.dart';
+import 'CreateInventaireScreen.dart';
+import 'ListeInventairesNonCloturesScreen.dart';
 import 'aa.dart';
+import 'choisirSocieteScreen.dart';
 
 
 
@@ -49,7 +52,7 @@ AuthController _authController = AuthController();
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[900],
-        title: Text("Lignes inventaires"),
+        title: Text("Inventaire "+_numinv.toString()),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -78,6 +81,130 @@ AuthController _authController = AuthController();
           ),
         ],
       ),
+      drawer: Drawer(
+        child: Container(
+          color: Colors.blueGrey[900], // Set the background color
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    Text(
+                      'Inventaire',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 4,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: Image.network(
+                            'https://cdn-icons-png.flaticon.com/128/2682/2682065.png',
+                            fit: BoxFit.cover,
+                            height: 80,
+                            width: 80,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.blueGrey[900],
+                      size: 12.0,
+                    ),
+                  ),
+                ),
+                title: Text(
+                  'Liste des inventaires clôturés',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  // Navigate to the main page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.cancel_outlined,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Liste des inventaires non clôturés',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  // Navigate to the cancelled orders page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListeInventairesNonCloturesScreen()),);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.check_circle_outline_rounded,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Créer un inventaire',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  // Navigate to the validated orders page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CreateInventaireScreen()),);
+                },
+              ),
+
+              ListTile(
+                leading: Icon(
+                  Icons.cancel_outlined,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Choisir société',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  // Navigate to the cancelled orders page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChoisirSocieteScreen()),);
+                },
+              ),
+
+            ],
+          ),
+        ),
+      ),
     body: Form(
         key: _formKey,
         child: Padding(
@@ -85,19 +212,23 @@ AuthController _authController = AuthController();
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextFormField(
-                initialValue: _numinv,
-                enabled: false,
-                decoration: InputDecoration(labelText: 'Numéro inventaire'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Numéro Inventaire';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _numinv = value!,
-              ),
-              SizedBox(height: 16.0),
+            Container(
+            alignment: Alignment.center,
+            child: TextFormField(
+              initialValue: _numinv,
+              enabled: false,
+              decoration: InputDecoration(labelText: 'Numéro inventaire'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Numéro Inventaire';
+                }
+                return null;
+              },
+            ),
+          ),
+
+
+            SizedBox(height: 16.0),
               TextFormField(
                 initialValue: _codepv,
                 enabled: false,
@@ -165,27 +296,7 @@ AuthController _authController = AuthController();
 
 
 
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ListeInventairesScreen(),
-                    ),
-                  );
-                },
-                child: Text('Liste inventaires'),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.lightBlueAccent,
-                  onPrimary: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
 
             ],
           ),

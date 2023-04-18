@@ -1,6 +1,7 @@
 
 
 import 'dart:typed_data';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
@@ -10,8 +11,12 @@ import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import 'package:inventaire_mobile/Models/Inventaire.dart';
 import 'package:inventaire_mobile/Models/LigneDepot.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
+import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
+import 'package:provider/provider.dart';
 
+import 'ListeInventairesNonCloturesScreen.dart';
 import 'aa.dart';
+import 'choisirSocieteScreen.dart';
 
 
 
@@ -218,18 +223,41 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[900],
-        title: Text("Liste des inventaires"),
+        title: Text("Inventaire "+_numinv.toString()),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
-              _authController.logout();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(),
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.warning,
+                animType: AnimType.bottomSlide,
+                title: 'Confirm Logout',
+                desc: 'Are you sure you want to log out?',
+                btnCancelOnPress: () {},
+                btnOkOnPress: () {
+                  _authController.logout();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ),
+                  );
+                },
+              )..show();
+            },
+          ),
+          Consumer<ThemeModel>(
+            builder: (context, themeNotifier, child) {
+              return IconButton(
+
+                icon: Icon(themeNotifier.isDark ? Icons.nightlight_round : Icons.wb_sunny,
+                  color: themeNotifier.isDark ? Colors.white : Colors.white,
                 ),
-              );// call the logout function and pass in the BuildContext of the current screen
+                onPressed: () {
+                  themeNotifier.isDark = !themeNotifier.isDark;
+                },
+              );
             },
           ),
         ],
@@ -248,7 +276,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                   children: [
                     SizedBox(height: 20),
                     Text(
-                      'Historique',
+                      'Inventaire',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -287,14 +315,14 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Icon(
-                      Icons.home_filled,
+                      Icons.add,
                       color: Colors.blueGrey[900],
                       size: 12.0,
                     ),
                   ),
                 ),
                 title: Text(
-                  'Page principale',
+                  'Liste des inventaires clôturés',
                   style: TextStyle(color: Colors.white),
                 ),
                 onTap: () {
@@ -302,6 +330,22 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.cancel_outlined,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Liste des inventaires non clôturés',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  // Navigate to the cancelled orders page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListeInventairesNonCloturesScreen()),);
                 },
               ),
               ListTile(
@@ -320,20 +364,21 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                     MaterialPageRoute(builder: (context) => CreateInventaireScreen()),);
                 },
               ),
+
               ListTile(
                 leading: Icon(
                   Icons.cancel_outlined,
                   color: Colors.white,
                 ),
                 title: Text(
-                  'Commandes annulées',
+                  'Choisir société',
                   style: TextStyle(color: Colors.white),
                 ),
                 onTap: () {
                   // Navigate to the cancelled orders page
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
+                    MaterialPageRoute(builder: (context) => ChoisirSocieteScreen()),);
                 },
               ),
 

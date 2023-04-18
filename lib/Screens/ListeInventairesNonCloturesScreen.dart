@@ -5,23 +5,23 @@ import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/Inventaire.dart';
 import 'package:inventaire_mobile/Screens/AfficherLignesInventaire.dart';
 import 'package:inventaire_mobile/Screens/CloturerInventaireScreen.dart';
-import 'package:inventaire_mobile/Screens/ListeInventairesNonCloturesScreen.dart';
 import 'package:inventaire_mobile/Screens/SelectionnerArticlesScreen.dart';
 import 'package:inventaire_mobile/Screens/ComptagePhysiqueScreen.dart';
 import 'package:inventaire_mobile/Screens/LoginScreen.dart';
 import 'package:inventaire_mobile/Screens/aa.dart';
-import 'package:inventaire_mobile/Screens/choisirSocieteScreen.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import 'CreateInventaireScreen.dart';
-class ListeInventairesScreen extends StatefulWidget {
+import 'ListeInventairesScreen.dart';
+import 'choisirSocieteScreen.dart';
+class ListeInventairesNonCloturesScreen extends StatefulWidget {
   @override
-  State<ListeInventairesScreen> createState() => _ListeInventairesScreenState();
+  State<ListeInventairesNonCloturesScreen> createState() => _ListeInventairesNonCloturesScreenState();
 }
 
-class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
+class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonCloturesScreen> {
 
   final InventaireController _inventaireController = InventaireController();
   final AuthController _authController= AuthController() ;
@@ -40,11 +40,10 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
       _isLoading = true;
     });
     try {
-      final List<Inventaire> inventaires = await _inventaireController.fetchInventaires();
-      final List<Inventaire> filteredInventaires = inventaires.where((inventaire) => inventaire.cloture == "1").toList();
+      final List<Inventaire> inventaires = await _inventaireController.fetchInventairesNonClotures() ;
       setState(() {
         _isLoading = false;
-        _inventaires = filteredInventaires;
+        _inventaires = inventaires;
       });
     } catch (e) {
       setState(() {
@@ -61,7 +60,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[900],
         title: Text("Liste des inventaires clôturés"),
@@ -78,19 +77,19 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
               );// call the logout function and pass in the BuildContext of the current screen
             },
           ),
-                Consumer<ThemeModel>(
-              builder: (context, themeNotifier, child) {
-                return IconButton(
+          Consumer<ThemeModel>(
+            builder: (context, themeNotifier, child) {
+              return IconButton(
 
-                  icon: Icon(themeNotifier.isDark ? Icons.nightlight_round : Icons.wb_sunny,
-                color: themeNotifier.isDark ? Colors.white : Colors.white,
+                icon: Icon(themeNotifier.isDark ? Icons.nightlight_round : Icons.wb_sunny,
+                  color: themeNotifier.isDark ? Colors.white : Colors.white,
                 ),
                 onPressed: () {
-                themeNotifier.isDark = !themeNotifier.isDark;
+                  themeNotifier.isDark = !themeNotifier.isDark;
                 },
-                );
-                },
-        ),
+              );
+            },
+          ),
         ],
       ),
       drawer: Drawer(
@@ -159,7 +158,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                 onTap: () {
                   // Navigate to the main page
                   Navigator.push(
-                      context,
+                    context,
                     MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
                 },
               ),
