@@ -39,6 +39,8 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
   String? _numinv;
   String? _codepv;
   String? _codedep;
+  String? _libpv;
+  String? _libdep;
   late List<LigneDepot> _filteredLignesDepot;
   late List<bool> _checkboxStates;
   int selectedLineCount = 0;
@@ -149,7 +151,8 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
     _numinv = widget.inventaire.numinv;
     _codepv = widget.inventaire.codepv;
     _codedep = widget.inventaire.codedep;
-
+    _libdep =widget.inventaire.libdep;
+    _libpv = widget.inventaire.libpv;
     _filteredLignesDepot =widget.inventaire.depot?.lignesDepot ?? [];
     _lignesdepot = widget.inventaire.depot?.lignesDepot ?? [];
 
@@ -315,7 +318,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Icon(
-                      Icons.add,
+                      Icons.list,
                       color: Colors.blueGrey[900],
                       size: 12.0,
                     ),
@@ -334,7 +337,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
               ),
               ListTile(
                 leading: Icon(
-                  Icons.cancel_outlined,
+                  Icons.list_alt,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -350,7 +353,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
               ),
               ListTile(
                 leading: Icon(
-                  Icons.check_circle_outline_rounded,
+                  Icons.add,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -367,7 +370,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
 
               ListTile(
                 leading: Icon(
-                  Icons.cancel_outlined,
+                  Icons.account_balance_sharp,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -386,81 +389,116 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
           ),
         ),
       ),
+
       body: Form(
         key: _formKey,
         child: Padding(
           padding: EdgeInsets.all(16.0),
+          child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Numéro inventaire TextFormField
-              TextFormField(
-                initialValue: _numinv,
-                enabled: false,
-                decoration: InputDecoration(labelText: 'Numéro inventaire'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Numéro Inventaire';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _numinv = value!,
-              ),
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+          Center(
+          child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          Text(
+          'Numéro inventaire',
+          style: TextStyle(
+          fontSize: 24,
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.bold,
+          color: Colors.grey[800],
+          letterSpacing: 2,
+          height: 1.5,
+          // add some padding
+          ),
+          ),
+          Text(
+          _numinv!,
+          style: TextStyle(
+          fontSize: 20,
+          fontFamily: 'Open Sans',
+          color: Colors.grey[400],
+          height: 1.5,
+          ),
+          ),
+          ],
+          ),
+          ),
 
-              // Scan Barcode Button
-              MaterialButton(
-                child: Text('Scan Barcode'),
-                onPressed: () async {
-                  String? barcode = await scanBarcode();
-                },
-              ),
 
-              SizedBox(height: 16.0),
 
-              // Point de vente TextFormField
-              TextFormField(
-                initialValue: _codepv,
-                enabled: false,
-                decoration: InputDecoration(labelText: 'Point de vente'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Point de vente';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _codepv = value!,
-              ),
 
-              SizedBox(height: 16.0),
 
-              // Depot TextFormField
-              TextFormField(
-                enabled: false,
-                initialValue: _codedep,
-                decoration: InputDecoration(labelText: 'Depot'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Depot';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _codedep = value!,
-              ),
+          SizedBox(height: 16.0),
+          Center(
+          child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          Text(
+          'Point de vente ',
+          style: TextStyle(
+          fontSize: 24,
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.bold,
+          color: Colors.grey[800],
+          letterSpacing: 2,
+          height: 1.5,
+          // add some padding
+          ),
+          ),
+          Text(
+          _libpv!,
+          style: TextStyle(
+          fontSize: 20,
+          fontFamily: 'Open Sans',
+          color: Colors.grey[400],
+          height: 1.5,
+          ),
+          ),
+          ],
+          ),
+          ),
+          SizedBox(height: 16.0),
+          Center(
+          child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          Text(
+          'Dépôt',
+          style: TextStyle(
+          fontSize: 24,
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.bold,
+          color: Colors.grey[800],
+          letterSpacing: 2,
+          height: 1.5,
+          // add some padding
+          ),
+          ),
+          Text(
+          _libdep!,
+          style: TextStyle(
+          fontSize: 20,
+          fontFamily: 'Open Sans',
+          color: Colors.grey[400],
+          height: 1.5,
+          ),
+          ),
+          ],
+          ),
+          ),
+    SizedBox(height: 16.0),
+            MaterialButton(
+              child: Text('Scan Barcode'),
+              onPressed: () async {
+                String? barcode = await scanBarcode();
+              },
+            ),
+            SizedBox(height: 16.0),
 
-              SizedBox(height: 16.0),
-
-              // Nombre Total Des Articles TextField
-              TextField(
-                enabled: false,
-                controller: _countController,
-                decoration: InputDecoration(labelText: "Nombre Total Des Articles"),
-                keyboardType: TextInputType.number,
-                readOnly: true,
-              ),
-
-              SizedBox(height: 16.0),
-
-              // Liste des articles Text
+    // Liste des articles Text
               Center(
                 child: Text(
                   'Liste des articles',
@@ -548,6 +586,6 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
           ),
         ),
       ),
-    );
+    ),);
   }
 }

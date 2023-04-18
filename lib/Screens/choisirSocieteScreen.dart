@@ -92,14 +92,6 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => login(),
-            ),
-          ),
-        )
 
     );
   }

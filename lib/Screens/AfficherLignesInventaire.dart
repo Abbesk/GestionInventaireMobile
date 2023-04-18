@@ -30,15 +30,15 @@ class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventair
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late List<LigneInventaire> _lignesInventaire;
   String? _numinv;
-  String? _codepv;
-  String? _codedep;
+  String? _libpv;
+  String? _libdep;
 AuthController _authController = AuthController();
   @override
   void initState() {
     super.initState();
     _numinv = widget.inventaire.numinv;
-    _codepv = widget.inventaire.codepv;
-    _codedep = widget.inventaire.codedep;
+    _libdep=widget.inventaire.libdep;
+    _libpv=widget.inventaire.libpv;
     _lignesInventaire = (widget.inventaire.lignesInventaire ?? []) as List<LigneInventaire>;
 
   }
@@ -134,7 +134,7 @@ AuthController _authController = AuthController();
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Icon(
-                      Icons.add,
+                      Icons.list,
                       color: Colors.blueGrey[900],
                       size: 12.0,
                     ),
@@ -153,7 +153,7 @@ AuthController _authController = AuthController();
               ),
               ListTile(
                 leading: Icon(
-                  Icons.cancel_outlined,
+                  Icons.list_alt,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -169,7 +169,7 @@ AuthController _authController = AuthController();
               ),
               ListTile(
                 leading: Icon(
-                  Icons.check_circle_outline_rounded,
+                  Icons.add,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -186,7 +186,7 @@ AuthController _authController = AuthController();
 
               ListTile(
                 leading: Icon(
-                  Icons.cancel_outlined,
+                  Icons.account_balance_sharp,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -205,55 +205,110 @@ AuthController _authController = AuthController();
           ),
         ),
       ),
-    body: Form(
+
+      body: Form(
         key: _formKey,
         child: Padding(
           padding: EdgeInsets.all(16.0),
+
+          child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-            Container(
-            alignment: Alignment.center,
-            child: TextFormField(
-              initialValue: _numinv,
-              enabled: false,
-              decoration: InputDecoration(labelText: 'Numéro inventaire'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Numéro Inventaire';
-                }
-                return null;
-              },
-            ),
-          ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Numéro inventaire',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[800],
+                        letterSpacing: 2,
+                        height: 1.5,
+                        // add some padding
+                      ),
+                    ),
+                    Text(
+                      _numinv!,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Open Sans',
+                        color: Colors.grey[400],
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
 
-            SizedBox(height: 16.0),
-              TextFormField(
-                initialValue: _codepv,
-                enabled: false,
-                decoration: InputDecoration(labelText: 'Point de vente'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Point de vente';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _codepv = value!,
+
+
+
+              SizedBox(height: 16.0),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Point de vente ',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[800],
+                        letterSpacing: 2,
+                        height: 1.5,
+                        // add some padding
+                      ),
+                    ),
+                    Text(
+                      _libpv!,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Open Sans',
+                        color: Colors.grey[400],
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 16.0),
-              TextFormField(
-                initialValue: _codedep,
-                decoration: InputDecoration(labelText: 'Depot'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Depot';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _codedep = value!,
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Dépôt',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[800],
+                        letterSpacing: 2,
+                        height: 1.5,
+                        // add some padding
+                      ),
+                    ),
+                    Text(
+                      _libdep!,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Open Sans',
+                        color: Colors.grey[400],
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 16.0),
+
+
 
 
 // Texte "Lignes de dépôt"
@@ -272,8 +327,8 @@ AuthController _authController = AuthController();
                   child: DataTable(
                     columns: [
                       DataColumn(label: Text('Famille')),
-                      DataColumn(label: Text('Code Article')),
-                      DataColumn(label: Text('Lib')),
+                      DataColumn(label: Text('Code ')),
+                      DataColumn(label: Text('Libellé ')),
                       DataColumn(label: Text('Qte_S')),
                       DataColumn(label: Text('Ecart')),
                     ],
@@ -302,6 +357,6 @@ AuthController _authController = AuthController();
           ),
         ),
       ),
-    );
+    ),);
   }
 }

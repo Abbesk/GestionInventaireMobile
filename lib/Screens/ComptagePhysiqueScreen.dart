@@ -178,7 +178,7 @@ AuthController _authController = AuthController();
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Icon(
-                      Icons.add,
+                      Icons.list,
                       color: Colors.blueGrey[900],
                       size: 12.0,
                     ),
@@ -197,7 +197,7 @@ AuthController _authController = AuthController();
               ),
               ListTile(
                 leading: Icon(
-                  Icons.cancel_outlined,
+                  Icons.list_alt,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -213,7 +213,7 @@ AuthController _authController = AuthController();
               ),
               ListTile(
                 leading: Icon(
-                  Icons.check_circle_outline_rounded,
+                  Icons.add,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -230,7 +230,7 @@ AuthController _authController = AuthController();
 
               ListTile(
                 leading: Icon(
-                  Icons.cancel_outlined,
+                  Icons.account_balance_sharp,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -249,6 +249,7 @@ AuthController _authController = AuthController();
           ),
         ),
       ),
+
       body: Form(
         key: _formKey,
         child: Padding(

@@ -1,4 +1,5 @@
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
@@ -69,13 +70,23 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
-              _authController.logout();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ),
-              );// call the logout function and pass in the BuildContext of the current screen
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.warning,
+                animType: AnimType.bottomSlide,
+                title: 'Confirm Logout',
+                desc: 'Are you sure you want to log out?',
+                btnCancelOnPress: () {},
+                btnOkOnPress: () {
+                  _authController.logout();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ),
+                  );
+                },
+              )..show();
             },
           ),
                 Consumer<ThemeModel>(
@@ -146,7 +157,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Icon(
-                      Icons.add,
+                      Icons.list,
                       color: Colors.blueGrey[900],
                       size: 12.0,
                     ),
@@ -159,13 +170,13 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                 onTap: () {
                   // Navigate to the main page
                   Navigator.push(
-                      context,
+                    context,
                     MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
                 },
               ),
               ListTile(
                 leading: Icon(
-                  Icons.cancel_outlined,
+                  Icons.list_alt,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -181,7 +192,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
               ),
               ListTile(
                 leading: Icon(
-                  Icons.check_circle_outline_rounded,
+                  Icons.add,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -198,7 +209,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
 
               ListTile(
                 leading: Icon(
-                  Icons.cancel_outlined,
+                  Icons.account_balance_sharp,
                   color: Colors.white,
                 ),
                 title: Text(
