@@ -49,51 +49,100 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset : false,
-        appBar: AppBar(
-          title: Text("Choisir une société"),
-        ),
-        body: _isLoading
-            ? const Center(
-          child: CircularProgressIndicator(),
-        )
-            : Row(
-          children: [
-            Expanded(
-              child: Container(
-                //width: 500,
-                child: ListView.builder(
-                  itemCount: _societes.length,
-                  itemBuilder: (context, index) {
-                    UserSoc article = _societes[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
+      backgroundColor: Colors.grey[200],
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: Colors.blueGrey[700],
+        title: Text("Choisir une société"),
+      ),
+      body: _isLoading
+          ? const Center(
+        child: CircularProgressIndicator(),
+      )
+          : Container(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: _societes.length,
+          itemBuilder: (context, index) {
+            UserSoc article = _societes[index];
+            return Container(
+              margin: const EdgeInsets.only(bottom: 16.0),
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white, // set the box color to white
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 40.0,
+                    height: 40.0,
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey[700], // set the circle color to dark grey
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Icon(
+                      Icons.home_work_sharp, // replace with the building icon or any other icon you want
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    child: Text(
+                      article.societe,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blueGrey[900],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 16.0,
+                    ),
+                    child: Container(
+                      width: 40.0,
+                      height: 40.0,
+                      decoration: BoxDecoration(
+                        color: Colors.blueGrey[700],
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
                         onPressed: () async {
                           String soc = article.societe; // or use your own logic to get the selected 'soc' value
                           try {
                             await _authController.choisirSociete(soc);
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => ListeInventairesScreen()),
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ListeInventairesScreen(),
+                              ),
                             );
                           } catch (e) {
                             print(e);
                             // handle error response here
                           }
                         },
-                        child: Text(article.societe),
+                        icon: Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
+                        padding: const EdgeInsets.all(0),
                       ),
-                    );
-                  },
-                )
-
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+            );
+          },
         ),
-
+      ),
     );
+
+
   }
 }
 

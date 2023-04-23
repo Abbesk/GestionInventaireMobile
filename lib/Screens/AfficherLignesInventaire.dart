@@ -32,6 +32,8 @@ class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventair
   String? _numinv;
   String? _libpv;
   String? _libdep;
+  String? _datecloture;
+  String? _dateinv;
 AuthController _authController = AuthController();
   @override
   void initState() {
@@ -40,7 +42,8 @@ AuthController _authController = AuthController();
     _libdep=widget.inventaire.libdep;
     _libpv=widget.inventaire.libpv;
     _lignesInventaire = (widget.inventaire.lignesInventaire ?? []) as List<LigneInventaire>;
-
+    _dateinv = widget.inventaire.dateinv.toString();
+    _datecloture= widget.inventaire.datecloture.toString();
   }
 
 
@@ -212,72 +215,128 @@ AuthController _authController = AuthController();
           padding: EdgeInsets.all(16.0),
 
           child: Center(
-          child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Numéro inventaire',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                        letterSpacing: 2,
-                        height: 1.5,
-                        // add some padding
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Numéro inventaire',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 2,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _numinv!,
+                            style: TextStyle(
+                              fontSize: 16,
+                                fontFamily: 'Montserrat',
+                              letterSpacing: 2,
+                              color: Colors.grey[400],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      _numinv!,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Open Sans',
-                        color: Colors.grey[400],
-                        height: 1.5,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Date de création',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 2,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _dateinv!,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Open Sans',
+                              color: Colors.grey[400],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
 
-
-
-
-
-              SizedBox(height: 16.0),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Point de vente ',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                        letterSpacing: 2,
-                        height: 1.5,
-                        // add some padding
+                SizedBox(height: 16.0),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Point de vente ',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 2,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _libpv!,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Open Sans',
+                              color: Colors.grey[400],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      _libpv!,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Open Sans',
-                        color: Colors.grey[400],
-                        height: 1.5,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Date de clôture',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 2,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _datecloture!,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Open Sans',
+                              color: Colors.grey[400],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 16.0),
+
+                SizedBox(height: 16.0),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -307,20 +366,6 @@ AuthController _authController = AuthController();
                 ),
               ),
               SizedBox(height: 16.0),
-
-
-
-
-// Texte "Lignes de dépôt"
-              Text(
-                'Liste des articles',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-// Tableau pour afficher les lignes de dépôt
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
