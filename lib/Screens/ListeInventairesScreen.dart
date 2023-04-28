@@ -5,12 +5,8 @@ import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/Inventaire.dart';
 import 'package:inventaire_mobile/Screens/AfficherLignesInventaire.dart';
-import 'package:inventaire_mobile/Screens/CloturerInventaireScreen.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesNonCloturesScreen.dart';
-import 'package:inventaire_mobile/Screens/SelectionnerArticlesScreen.dart';
-import 'package:inventaire_mobile/Screens/ComptagePhysiqueScreen.dart';
-import 'package:inventaire_mobile/Screens/LoginScreen.dart';
-import 'package:inventaire_mobile/Screens/aa.dart';
+import 'package:inventaire_mobile/Screens/AuthentifierScreen.dart';
 import 'package:inventaire_mobile/Screens/choisirSocieteScreen.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
 import 'package:provider/provider.dart';
@@ -248,11 +244,11 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               // aligns children to the start of the row
               children: [
-                Expanded(child: Text("Numéro")),
+                Expanded(child: Text("Num")),
                 SizedBox(width: 5),
                 Expanded(child: Text("Date")),
                 SizedBox(width: 5),
-                Expanded(child: Text("P_Vente")),
+                Expanded(child: Text("PV")),
                 SizedBox(width: 5),
                 Expanded(child: Text("Depot")),
               ],
@@ -274,49 +270,6 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Visibility(
-                  visible: !isClotured,
-                  child: IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () async {
-                      i1 = await _inventaireController.getInventaireById(i.numinv!) as Inventaire;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SelectionnerArticleScreen(inventaire: i1),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Visibility(
-                  visible: !isClotured,
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ComptagePhysiqueScreen(inventaire: i),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Visibility(
-                  visible: !isClotured,
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CloturerInventaireScreen(inventaire: i),
-                        ),
-                      );
-                    },
-                  ),
-                ),
                 Visibility(
                   visible: isClotured,
                   child: IconButton(

@@ -209,7 +209,7 @@ class InventaireController extends GetxController {
   }
 
   Future<void> CreerInventaire(Inventaire invphysique) async {
-    final url = 'http://localhost:44328/api/Inventaire';
+    final url = 'http://localhost:44328/api/Inventaire/Create';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 

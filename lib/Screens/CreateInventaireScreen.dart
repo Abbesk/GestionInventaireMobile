@@ -11,7 +11,7 @@ import '../Controllers/AuthController.dart';
 import '../Models/Inventaire.dart';
 import '../Models/PointVente.dart';
 import 'ListeInventairesNonCloturesScreen.dart';
-import 'aa.dart';
+import 'AuthentifierScreen.dart';
 import 'choisirSocieteScreen.dart';
 
 class CreateInventaireScreen extends StatefulWidget {
@@ -84,7 +84,7 @@ late  bool theme_d ;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[900],
-        title: Text("Créer un nouveau inventaire"),
+        title: Text("Nouveau inventaire"),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -525,7 +525,7 @@ late  bool theme_d ;
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ListeInventairesScreen()),
+                        MaterialPageRoute(builder: (context) => ListeInventairesNonCloturesScreen()),
                       );
                     }
                   },

@@ -1,17 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
-
 import 'package:inventaire_mobile/Models/UserSoc.dart';
 import 'package:inventaire_mobile/Screens/CreateInventaireScreen.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
-import 'package:inventaire_mobile/Screens/LoginScreen.dart';
 class ChoisirSocieteScreen extends StatefulWidget {
   @override
   State<ChoisirSocieteScreen> createState() => _ChoisirSocieteScreen();
 }
-
 class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
   final InventaireController _inventaireController = InventaireController();
   final AuthController _authController = AuthController();
@@ -21,9 +17,7 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
   void initState() {
     super.initState();
     _fetchSocietes();
-
   }
-
   _fetchSocietes() async {
     setState(() {
       _isLoading = true;
@@ -41,11 +35,6 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
       print(e);
     }
   }
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

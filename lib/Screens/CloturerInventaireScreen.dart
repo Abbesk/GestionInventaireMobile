@@ -1,6 +1,7 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
@@ -13,7 +14,7 @@ import '../Models/Inventaire.dart';
 import '../Models/TMPLigneDepot.dart';
 import 'CreateInventaireScreen.dart';
 import 'ListeInventairesNonCloturesScreen.dart';
-import 'aa.dart';
+import 'AuthentifierScreen.dart';
 import 'choisirSocieteScreen.dart';
 
 
@@ -36,6 +37,7 @@ class _CloturerInventaireScreenState extends State<CloturerInventaireScreen> {
   String? _codedep;
   String? _libdep ;
   String? _libpv;
+  String? _dateinv;
 AuthController _authController = AuthController();
   @override
   void initState() {
@@ -46,7 +48,7 @@ AuthController _authController = AuthController();
     _libdep=widget.inventaire.libdep;
     _libpv=widget.inventaire.libpv;
     _tmpLignesDepot = (widget.inventaire.depot?.tmp_LignesDepot ?? []) as List<TMPLigneDepot>;
-
+    _dateinv= widget.inventaire.dateinv.toString();
   }
 
 
@@ -253,103 +255,132 @@ AuthController _authController = AuthController();
         key: _formKey,
         child: Padding(
           padding: EdgeInsets.all(16.0),
-                        child: Center(
-                        child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        Center(
-                        child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                        Text(
-                        'Numéro inventaire',
-                        style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                        letterSpacing: 2,
-                        height: 1.5,
-                        // add some padding
-                        ),
-                        ),
-                        Text(
-                        _numinv!,
-                        style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Open Sans',
-                        color: Colors.grey[400],
-                        height: 1.5,
-                        ),
-                        ),
+                          Text(
+                            'N° Inventaire',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _numinv!,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
                         ],
-                        ),
-                        ),
-
-
-
-
-
-                        SizedBox(height: 16.0),
-                        Center(
-                        child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                        Text(
-                        'Point de vente ',
-                        style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                        letterSpacing: 2,
-                        height: 1.5,
-                        // add some padding
-                        ),
-                        ),
-                        Text(
-                        _libpv!,
-                        style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Open Sans',
-                        color: Colors.grey[400],
-                        height: 1.5,
-                        ),
-                        ),
+                          Text(
+                            'Date de création',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            DateFormat('dd/MM/yy').format(DateTime.parse(_dateinv!)),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
                         ],
-                        ),
-                        ),
-                        SizedBox(height: 16.0),
-                        Center(
-                        child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 16.0),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        Text(
-                        'Dépôt',
-                        style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                        letterSpacing: 2,
-                        height: 1.5,
-                        // add some padding
-                        ),
-                        ),
-                        Text(
-                        _libdep!,
-                        style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Open Sans',
-                        color: Colors.grey[400],
-                        height: 1.5,
-                        ),
-                        ),
+                          Text(
+                            'Point de vente ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _codepv!+"-"+_libpv!,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Open Sans',
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
                         ],
-                        ),
-                        ),
-    SizedBox(height: 16.0),
-// Tableau pour afficher les lignes de dépôt
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Dépôt',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _codedep!+"-"+_libdep!,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Open Sans',
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16.0),
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,

@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                             controller: emailController,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: "Email or Phone number"
+                                hintText: "Username"
                             ),
                           ),
                         ),

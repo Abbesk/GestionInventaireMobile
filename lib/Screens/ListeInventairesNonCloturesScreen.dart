@@ -8,7 +8,7 @@ import 'package:inventaire_mobile/Screens/AfficherLignesInventaire.dart';
 import 'package:inventaire_mobile/Screens/CloturerInventaireScreen.dart';
 import 'package:inventaire_mobile/Screens/SelectionnerArticlesScreen.dart';
 import 'package:inventaire_mobile/Screens/ComptagePhysiqueScreen.dart';
-import 'package:inventaire_mobile/Screens/aa.dart';
+import 'package:inventaire_mobile/Screens/AuthentifierScreen.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -245,12 +245,12 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
               crossAxisAlignment: CrossAxisAlignment.start,
               // aligns children to the start of the row
               children: [
-                Expanded(child: Text("Numéro")),
-                SizedBox(width: 5),
+                Expanded(child: Text("Num")),
+
                 Expanded(child: Text("Date")),
-                SizedBox(width: 5),
-                Expanded(child: Text("P_Vente")),
-                SizedBox(width: 5),
+
+                Expanded(child: Text("PV")),
+
                 Expanded(child: Text("Depot")),
               ],
             ),
@@ -268,67 +268,51 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
                 Expanded(child: Text(i.libdep!)),
               ],
             ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Visibility(
-                  visible: !isClotured,
-                  child: IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () async {
-                      i1 = await _inventaireController.getInventaireById(i.numinv!) as Inventaire;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SelectionnerArticleScreen(inventaire: i1),
-                        ),
-                      );
-                    },
+            trailing: PopupMenuButton(
+              itemBuilder: (BuildContext context) {
+                return <PopupMenuEntry>[
+                  PopupMenuItem(
+                    child: IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () async {
+                        i1 = await _inventaireController.getInventaireById(i.numinv!) as Inventaire;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SelectionnerArticleScreen(inventaire: i1),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                Visibility(
-                  visible: !isClotured,
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ComptagePhysiqueScreen(inventaire: i),
-                        ),
-                      );
-                    },
+                  PopupMenuItem(
+                    child: IconButton(
+                      icon: Icon(Icons.calculate_outlined),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ComptagePhysiqueScreen(inventaire: i),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                Visibility(
-                  visible: !isClotured,
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CloturerInventaireScreen(inventaire: i),
-                        ),
-                      );
-                    },
+                  PopupMenuItem(
+                    child: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CloturerInventaireScreen(inventaire: i),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                Visibility(
-                  visible: isClotured,
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AfficherLignesInventaireScreen(inventaire: i),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+                ];
+              },
             ),
           );
         },

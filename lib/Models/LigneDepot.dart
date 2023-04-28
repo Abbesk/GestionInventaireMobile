@@ -57,6 +57,8 @@ class LigneDepot {
 
   }
 
+
+
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     _data['Article'] = article;

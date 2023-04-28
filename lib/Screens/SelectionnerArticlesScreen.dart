@@ -1,9 +1,8 @@
 
-
-import 'dart:typed_data';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Models/Depot.dart';
 import 'package:inventaire_mobile/Screens/CreateInventaireScreen.dart';
@@ -13,14 +12,9 @@ import 'package:inventaire_mobile/Models/LigneDepot.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
 import 'package:provider/provider.dart';
-
 import 'ListeInventairesNonCloturesScreen.dart';
-import 'aa.dart';
+import 'AuthentifierScreen.dart';
 import 'choisirSocieteScreen.dart';
-
-
-
-
 
 class SelectionnerArticleScreen extends StatefulWidget {
   final Inventaire inventaire;
@@ -41,6 +35,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
   String? _codedep;
   String? _libpv;
   String? _libdep;
+  String? _dateinv;
   late List<LigneDepot> _filteredLignesDepot;
   late List<bool> _checkboxStates;
   int selectedLineCount = 0;
@@ -52,14 +47,11 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
         true,
         ScanMode.BARCODE
     );
-
     if (barcode != null) {
       LigneDepot? matchingLigne = _filteredLignesDepot.firstWhere(
             (ligne) => ligne.libelle == barcode,
 
       );
-
-      // Show confirmation dialog if matching ligne is found
       if (matchingLigne != null) {
         if (matchingLigne.isSelected == 1) {
           await _showAlreadySelectedDialog(matchingLigne);
@@ -155,6 +147,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
     _libpv = widget.inventaire.libpv;
     _filteredLignesDepot =widget.inventaire.depot?.lignesDepot ?? [];
     _lignesdepot = widget.inventaire.depot?.lignesDepot ?? [];
+    _dateinv= widget.inventaire.dateinv.toString();
 
     for (var ligne in _lignesdepot) {
 
@@ -395,100 +388,132 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Center(
-          child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-          Center(
-          child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-          Text(
-          'Numéro inventaire',
-          style: TextStyle(
-          fontSize: 24,
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.bold,
-          color: Colors.grey[800],
-          letterSpacing: 2,
-          height: 1.5,
-          // add some padding
-          ),
-          ),
-          Text(
-          _numinv!,
-          style: TextStyle(
-          fontSize: 20,
-          fontFamily: 'Open Sans',
-          color: Colors.grey[400],
-          height: 1.5,
-          ),
-          ),
-          ],
-          ),
-          ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'N° Inventaire',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _numinv!,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Date de création',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            DateFormat('dd/MM/yy').format(DateTime.parse(_dateinv!)),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 16.0),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Point de vente ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _codepv!+"-"+_libpv!,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Open Sans',
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Dépôt',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _codedep!+"-"+_libdep!,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Open Sans',
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
 
 
-
-
-
-          SizedBox(height: 16.0),
-          Center(
-          child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-          Text(
-          'Point de vente ',
-          style: TextStyle(
-          fontSize: 24,
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.bold,
-          color: Colors.grey[800],
-          letterSpacing: 2,
-          height: 1.5,
-          // add some padding
-          ),
-          ),
-          Text(
-          _libpv!,
-          style: TextStyle(
-          fontSize: 20,
-          fontFamily: 'Open Sans',
-          color: Colors.grey[400],
-          height: 1.5,
-          ),
-          ),
-          ],
-          ),
-          ),
-          SizedBox(height: 16.0),
-          Center(
-          child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-          Text(
-          'Dépôt',
-          style: TextStyle(
-          fontSize: 24,
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.bold,
-          color: Colors.grey[800],
-          letterSpacing: 2,
-          height: 1.5,
-          // add some padding
-          ),
-          ),
-          Text(
-          _libdep!,
-          style: TextStyle(
-          fontSize: 20,
-          fontFamily: 'Open Sans',
-          color: Colors.grey[400],
-          height: 1.5,
-          ),
-          ),
-          ],
-          ),
-          ),
     SizedBox(height: 16.0),
             MaterialButton(
               child: Text('Scan Barcode'),
@@ -514,42 +539,51 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: DataTable(
-                    columns: [
-                      DataColumn(label: Text('Code Article')),
-                      DataColumn(label: Text('Quantité')),
-                      DataColumn(label: Text('Famille')),
-                      DataColumn(label: Text('IsSelected')),
-                    ],
-                    rows: List<DataRow>.generate(
-                      _filteredLignesDepot.length,
-                          (index) {
-                        final ligne = _lignesdepot[index];
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columnSpacing: 1,
+                      dataTextStyle: TextStyle(fontSize: 16.0),
+                      columns: [
+                        DataColumn(label: Text('Famille')),
+                        DataColumn(label: Text('Code Article')),
+                        DataColumn(label: Text('Désignation Article')),
+                        DataColumn(label: Text('Quantité')),
 
-                        return DataRow(
-                          cells: [
-                            DataCell(Text(ligne.codeart)),
-                            DataCell(Text(ligne.qteart.toString())),
-                            DataCell(Text(ligne.famille!)),
-                            DataCell(
-                              StatefulBuilder(
-                                builder: (context, setState) {
-                                  return Checkbox(
-                                    value: ligne.isSelected == 1,
-                                    onChanged: (value) {
-                                      _updateLignesDepot(index, value!);
-                                      updateNombreSelectionne();
-                                    },
-                                  );
-                                },
+                        DataColumn(label: Text('')),
+                      ],
+                      rows: List<DataRow>.generate(
+                        _filteredLignesDepot.length,
+                            (index) {
+                          final ligne = _lignesdepot[index];
+
+                          return DataRow(
+                            cells: [
+                              DataCell(Text(ligne.famille!)),
+                              DataCell(Text(ligne.codeart)),
+                              DataCell(Text(ligne.desart)),
+                              DataCell(Text(ligne.qteart.toString())),
+                              DataCell(
+                                StatefulBuilder(
+                                  builder: (context, setState) {
+                                    return Checkbox(
+                                      value: ligne.isSelected == 1,
+                                      onChanged: (value) {
+                                        _updateLignesDepot(index, value!);
+                                        updateNombreSelectionne();
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      },
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
+
               ),
 
               Row(

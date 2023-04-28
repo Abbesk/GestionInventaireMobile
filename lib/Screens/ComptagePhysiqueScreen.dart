@@ -1,19 +1,19 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:intl/intl.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
 import 'package:provider/provider.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-
-
 import '../Models/Depot.dart';
 import '../Models/Inventaire.dart';
 import '../Models/TMPLigneDepot.dart';
 import 'CreateInventaireScreen.dart';
 import 'ListeInventairesNonCloturesScreen.dart';
-import 'aa.dart';
+import 'AuthentifierScreen.dart';
 import 'choisirSocieteScreen.dart';
 
 
@@ -36,6 +36,8 @@ class _ComptagePhysiqueScreenState extends State<ComptagePhysiqueScreen> {
   String? _codedep;
   String? _libdep ;
   String? _libpv ;
+  String? _dateinv;
+  late List<TMPLigneDepot> _filteredTMPLignesDepot;
 AuthController _authController = AuthController();
   @override
   void initState() {
@@ -46,10 +48,105 @@ AuthController _authController = AuthController();
     _libpv=widget.inventaire.libpv;
     _libdep= widget.inventaire.libdep;
     _tmpLignesDepot = (widget.inventaire.depot?.tmp_LignesDepot ?? []) as List<TMPLigneDepot>;
+    _filteredTMPLignesDepot =widget.inventaire.depot?.tmp_LignesDepot ?? [];
+    _dateinv= widget.inventaire.dateinv.toString();
 
   }
+  void updateQuantity(TMPLigneDepot ligne, int newQuantity) {
+    setState(() {
+      ligne.qteInventaire = newQuantity as double?;
+    });
+  }
+  Future<String?> scanBarcode() async {
+    String barcode = await FlutterBarcodeScanner.scanBarcode(
+        '#FF0000',
+        'Cancel',
+        true,
+        ScanMode.BARCODE
+    );
 
+    if (barcode != null) {
+      TMPLigneDepot? matchingLigne = _filteredTMPLignesDepot.firstWhere(
+            (ligne) => ligne.libelle == barcode,
 
+      );
+
+      if (matchingLigne == null) {
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Aucun article n\'est trouvé pour le code à barre scanné'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // Si matching ligne, ouvrir une fenêtre pour actualiser la ligne
+        TextEditingController quantityController = TextEditingController(
+          text: matchingLigne.qteInventaire.toString(),
+        );
+        bool isValidQuantity = false;
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return AlertDialog(
+                  title: Text('Actualiser la ligne'),
+                  content: TextField(
+                    controller: quantityController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Quantité',
+                      errorText: isValidQuantity ? null : 'Entrez un entier >=0',
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        isValidQuantity = int.tryParse(value) != null &&
+                            int.parse(value) >= 0;
+                      });
+                    },
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('Annuler'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text('Valider'),
+                      onPressed: isValidQuantity
+                          ? () {
+                        updateQuantity(matchingLigne, int.parse(quantityController.text));
+                        matchingLigne.qteInventaire =
+                            int.parse(quantityController.text) as double?;
+                        Navigator.of(context).pop();
+                      }
+                          : null,
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        );
+      }
+    }
+
+    return barcode;
+
+  }
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -254,240 +351,256 @@ AuthController _authController = AuthController();
         key: _formKey,
         child: Padding(
           padding: EdgeInsets.all(16.0),
-          // Center(
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       Text(
-          //         'Numéro Inventaire',
-          //         style: TextStyle(
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //       Center(
-          //         child: TextField(
-          //           textAlign: TextAlign.center,
-          //           controller: _numinvController,
-          //           enabled: false,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Numéro inventaire',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
-                          letterSpacing: 2,
-                          height: 1.5,
-                          // add some padding
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'N° Inventaire',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _numinv!,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        _numinv!,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Open Sans',
-                          color: Colors.grey[400],
-                          height: 1.5,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Date de création',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            DateFormat('dd/MM/yy').format(DateTime.parse(_dateinv!)),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-
-
-
-
 
                 SizedBox(height: 16.0),
                 Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Point de vente ',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
-                          letterSpacing: 2,
-                          height: 1.5,
-                          // add some padding
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Point de vente ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _codepv!+"-"+_libpv!,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Open Sans',
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        _libpv!,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Open Sans',
-                          color: Colors.grey[400],
-                          height: 1.5,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Dépôt',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                              letterSpacing: 1,
+                              height: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _codedep!+"-"+_libdep!,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Open Sans',
+                              color: Colors.grey[650],
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
+
+
                 SizedBox(height: 16.0),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Dépôt',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
-                          letterSpacing: 2,
-                          height: 1.5,
-                          // add some padding
-                        ),
-                      ),
-                      Text(
-                        _libdep!,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Open Sans',
-                          color: Colors.grey[400],
-                          height: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
+                MaterialButton(
+                  child: Text('Scan Barcode'),
+                  onPressed: () async {
+                    String? barcode = await scanBarcode();
+                  },
                 ),
+
                 SizedBox(height: 16.0),
-
-
-// Texte "Lignes de dépôt"
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
-                    child: DataTable(
-                      dataRowHeight: 50.0, // Adjust the height of each row
-                      headingRowHeight: 60.0, // Adjust the height of the heading row
-                      columns: [
-                        DataColumn(
-                          label: Text(
-                            'Famille',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Code Article',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Désignation',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Quantitée physique',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Justification',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                      rows: _tmpLignesDepot.map((ligne) {
-                        return DataRow(
-                          cells: [
-                            DataCell(
-                              Text(
-                                ligne.famille!,
-                                style: TextStyle(fontSize: 14.0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        dataRowHeight: 50.0,
+                        headingRowHeight: 60.0,
+                        columns: [
+                          DataColumn(
+                            label: Text(
+                              'Famille',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            DataCell(
-                              Text(
-                                ligne.codeart!,
-                                style: TextStyle(fontSize: 14.0),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Code Article',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            DataCell(
-                              Text(
-                                ligne.desart!,
-                                style: TextStyle(fontSize: 14.0),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Désignation',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            DataCell(
-                              TextFormField(
-                                initialValue: ligne.qteInventaire.toString(),
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Quantitée physique',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Justification',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                        rows: _tmpLignesDepot.map((ligne) {
+                          return DataRow(
+                            cells: [
+                              DataCell(
+                                Text(
+                                  ligne.famille!,
+                                  style: TextStyle(fontSize: 14.0),
                                 ),
-                                onChanged: (value) {
-                                  setState(() {
-                                    if (value == null || value.isEmpty) {
-                                      ligne.qteInventaire = 0;
-                                    } else {
-                                      double parsedValue = double.tryParse(value)!;
-                                      if (parsedValue != null && parsedValue > 0) {
-                                        ligne.qteInventaire = parsedValue;
-                                      } else {
+                              ),
+                              DataCell(
+                                Text(
+                                  ligne.codeart!,
+                                  style: TextStyle(fontSize: 14.0),
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  ligne.desart!,
+                                  style: TextStyle(fontSize: 14.0),
+                                ),
+                              ),
+                              DataCell(
+                                TextFormField(
+                                  initialValue: ligne.qteInventaire.toString(),
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (value == null || value.isEmpty) {
                                         ligne.qteInventaire = 0;
+                                      } else {
+                                        int parsedValue = int.tryParse(value) ?? 0;
+                                        ligne.qteInventaire = (parsedValue >= 0 ? parsedValue : 0) as double?;
                                       }
-                                    }
-                                  });
-                                },
-                                style: TextStyle(fontSize: 14.0),
-                              ),
-                            ),
-                            DataCell(
-                              TextFormField(
-                                initialValue: ligne.commentaire,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
+                                    });
+                                  },
+                                  style: TextStyle(fontSize: 14.0),
                                 ),
-                                onChanged: (value) {
-                                  setState(() {
-                                    ligne.commentaire = value;
-                                  });
-                                },
-                                style: TextStyle(fontSize: 14.0),
                               ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
+                              DataCell(
+                                TextFormField(
+                                  initialValue: ligne.commentaire,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      ligne.commentaire = value;
+                                    });
+                                  },
+                                  style: TextStyle(fontSize: 14.0),
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),

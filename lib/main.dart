@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:inventaire_mobile/Screens/LoginScreen.dart';
 import 'package:get/get.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:provider/provider.dart';
-
-import 'Screens/aa.dart';
+import 'Screens/AuthentifierScreen.dart';
 import 'Screens/themes/app_theme.dart';
 import 'Screens/themes/theme_model.dart';
 
