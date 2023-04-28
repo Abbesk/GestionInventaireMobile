@@ -61,7 +61,10 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
         resizeToAvoidBottomInset : false,
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[900],
-        title: Text("Liste des inventaires clôturés"),
+        title: Text(
+          "Liste des inventaires clôturés",
+          style: TextStyle(fontSize: 16),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),

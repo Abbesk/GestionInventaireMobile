@@ -184,7 +184,7 @@ class InventaireController extends GetxController {
       body: json.encode(invphysique.toJson()),
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 200  ) {
       throw Exception('Failed to update inventory: ${response.body}');
     }
   }

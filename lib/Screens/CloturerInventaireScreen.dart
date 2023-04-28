@@ -56,29 +56,66 @@ AuthController _authController = AuthController();
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       try {
+        final isConfirmed = await showConfirmDialog(); // Voir la fonction showConfirmDialog() ci-dessous
 
-
-        final inventaire = Inventaire(
-          numinv: _numinv!,
-          codedep: _codedep!,
-          codepv: _codepv!,
-
-          depot: Depot(
-            Code: _codedep!,
+        if (isConfirmed) {
+          final inventaire = Inventaire(
+            numinv: _numinv!,
+            codedep: _codedep!,
             codepv: _codepv!,
-            tmp_LignesDepot: _tmpLignesDepot!,
-          ),
-        );
-        await _inventaireRepository.CloturerInventaire(
-          widget.inventaire.numinv!,
-          inventaire,
-        );
+            depot: Depot(
+              Code: _codedep!,
+              codepv: _codepv!,
+              tmp_LignesDepot: _tmpLignesDepot!,
+            ),
+          );
 
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ListeInventairesScreen()));
+          await _inventaireRepository.CloturerInventaire(
+            widget.inventaire.numinv!,
+            inventaire,
+          );
+
+          await showSuccessDialog(); // Voir la fonction showSuccessDialog() ci-dessous
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ListeInventairesScreen(),
+            ),
+          );
+        }
       } catch (e) {
         print(e);
       }
     }
+  }
+
+  Future<bool> showConfirmDialog() async {
+    final result = await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.question,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Confirmation',
+      desc: 'Voulez-vous vraiment clôturer l\'inventaire ?',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        Navigator.of(context).pop(true);
+      },
+    ).show();
+    return result ?? false;
+  }
+
+  Future<void> showSuccessDialog() async {
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Succès',
+      desc: 'L\'inventaire numéro'+_numinv.toString()+ 'a été clôturé avec succès !',
+      btnOkOnPress: () {},
+    ).show();
   }
 
   @override
@@ -384,45 +421,48 @@ AuthController _authController = AuthController();
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: DataTable(
-                    columns: [
-                      DataColumn(label: Text('Famille')),
-                      DataColumn(label: Text('Code Article')),
-                      DataColumn(label: Text('Désignation')),
-                      DataColumn(label: Text('Quantitée physique')),
-                      DataColumn(label: Text('Justification')),
-                    ],
-                    rows: _tmpLignesDepot.map(
-                          (ligne) => DataRow(
-                        cells: [
-                          DataCell(Text(ligne.famille!)),
-                          DataCell(Text(ligne.codeart!)),
-                          DataCell(Text(ligne.desart!)),
-                          DataCell(
-                            TextFormField(
-                              readOnly: true, // set to readOnly so it cannot be edited
-                              initialValue: ligne.qteInventaire.toString(),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: [
+                        DataColumn(label: Text('Famille')),
+                        DataColumn(label: Text('Code Article')),
+                        DataColumn(label: Text('Désignation')),
+                        DataColumn(label: Text('Quantitée physique')),
+                        DataColumn(label: Text('Justification')),
+                      ],
+                      rows: _tmpLignesDepot.map(
+                            (ligne) => DataRow(
+                          cells: [
+                            DataCell(Text(ligne.famille!)),
+                            DataCell(Text(ligne.codeart!)),
+                            DataCell(Text(ligne.desart!)),
+                            DataCell(
+                              TextFormField(
+                                readOnly: true, // set to readOnly so it cannot be edited
+                                initialValue: ligne.qteInventaire.toString(),
 
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+
                               ),
-
                             ),
-                          ),
-                          DataCell(
-                            TextFormField(
-                              readOnly: true, // set to readOnly so it cannot be edited
-                              initialValue: ligne.commentaire,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
+                            DataCell(
+                              TextFormField(
+                                readOnly: true, // set to readOnly so it cannot be edited
+                                initialValue: ligne.commentaire,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+
+
                               ),
-
-
                             ),
-                          ),
-                        ],
-                      ),
-                    ).toList(),
+                          ],
+                        ),
+                      ).toList(),
+                    ),
                   ),
                 ),
               ),
@@ -431,26 +471,64 @@ AuthController _authController = AuthController();
 
 
               SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  _submitForm();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ListeInventairesScreen(),
+                ElevatedButton(
+                  onPressed: () {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.question,
+                      animType: AnimType.bottomSlide,
+                      title: 'Confirmation',
+                      desc: 'Voulez-vous vraiment clôturer l\'inventaire ?',
+                      btnCancelText: 'Annuler',
+                      btnOkText: 'Confirmer',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () async {
+                        try {
+                          final inventaire = Inventaire(
+                            numinv: _numinv!,
+                            codedep: _codedep!,
+                            codepv: _codepv!,
+                            depot: Depot(
+                              Code: _codedep!,
+                              codepv: _codepv!,
+                              tmp_LignesDepot: _tmpLignesDepot!,
+                            ),
+                          );
+                          await _inventaireRepository.CloturerInventaire(
+                            widget.inventaire.numinv!,
+                            inventaire,
+                          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ListeInventairesScreen(),
+                            ),
+                          );
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.success,
+                            animType: AnimType.bottomSlide,
+                            title: 'Succès',
+                            desc: 'L\'inventaire numéro 1 a été clôturé avec succès.',
+                            btnOkText: 'OK',
+                            btnOkOnPress: () {},
+                          ).show();
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                    ).show();
+                  },
+                  child: Text('Enregistrer'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueGrey[900],
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  );
-                },
-                child: Text('Enregistrer'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueGrey[900],
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-              ),
 
             ],
           ),

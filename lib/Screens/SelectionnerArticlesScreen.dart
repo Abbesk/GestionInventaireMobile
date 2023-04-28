@@ -601,7 +601,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ListeInventairesScreen(),
+                      builder: (context) => ListeInventairesNonCloturesScreen(),
                     ),
                   );
                 },

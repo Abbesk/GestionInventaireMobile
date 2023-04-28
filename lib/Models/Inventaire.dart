@@ -72,7 +72,6 @@ class Inventaire {
     _data['cloture'] = cloture;
     _data['datecloture'] = datecloture;
     _data['utilisateur'] = utilisateur;
-
     _data['DATEDMAJ'] = DATEDMAJ;
     _data['codepv'] = codepv;
     _data['libpv'] = libpv;

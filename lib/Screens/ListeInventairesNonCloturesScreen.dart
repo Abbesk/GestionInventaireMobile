@@ -1,10 +1,8 @@
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/Inventaire.dart';
-import 'package:inventaire_mobile/Screens/AfficherLignesInventaire.dart';
 import 'package:inventaire_mobile/Screens/CloturerInventaireScreen.dart';
 import 'package:inventaire_mobile/Screens/SelectionnerArticlesScreen.dart';
 import 'package:inventaire_mobile/Screens/ComptagePhysiqueScreen.dart';
@@ -62,7 +60,10 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
       resizeToAvoidBottomInset : false,
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[900],
-        title: Text("Liste des inventaires non clôturés"),
+        title: Text(
+          "Liste des inventaires non clôturés",
+          style: TextStyle(fontSize: 13.5),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),

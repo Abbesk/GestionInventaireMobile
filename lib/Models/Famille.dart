@@ -6,7 +6,7 @@ class Famille {
 
 
   });
-  late  List<dynamic> Articles;
+
   late final String code;
   late  String? libelle;
 

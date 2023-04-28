@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/LigneInventaire.dart';
@@ -226,9 +227,9 @@ AuthController _authController = AuthController();
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Numéro inventaire',
+                            'N° Inventaire',
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 14,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
                               color: Colors.grey[800],
@@ -239,10 +240,10 @@ AuthController _authController = AuthController();
                           Text(
                             _numinv!,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                                 fontFamily: 'Montserrat',
                               letterSpacing: 2,
-                              color: Colors.grey[400],
+                              color: Colors.grey[650],
                               height: 1.5,
                             ),
                           ),
@@ -254,7 +255,7 @@ AuthController _authController = AuthController();
                           Text(
                             'Date de création',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
                               color: Colors.grey[800],
@@ -263,11 +264,11 @@ AuthController _authController = AuthController();
                             ),
                           ),
                           Text(
-                            _dateinv!,
+                            DateFormat('dd/MM/yyyy').format(DateTime.parse(_dateinv!)),
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 14,
                               fontFamily: 'Open Sans',
-                              color: Colors.grey[400],
+                              color: Colors.grey[650],
                               height: 1.5,
                             ),
                           ),
@@ -288,7 +289,7 @@ AuthController _authController = AuthController();
                           Text(
                             'Point de vente ',
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 14,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
                               color: Colors.grey[800],
@@ -299,9 +300,9 @@ AuthController _authController = AuthController();
                           Text(
                             _libpv!,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 14,
                               fontFamily: 'Open Sans',
-                              color: Colors.grey[400],
+                              color: Colors.grey[650],
                               height: 1.5,
                             ),
                           ),
@@ -313,7 +314,7 @@ AuthController _authController = AuthController();
                           Text(
                             'Date de clôture',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
                               color: Colors.grey[800],
@@ -322,11 +323,11 @@ AuthController _authController = AuthController();
                             ),
                           ),
                           Text(
-                            _datecloture!,
+                            DateFormat('dd/MM/yyyy').format(DateTime.parse(_datecloture!)),
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'Open Sans',
-                              color: Colors.grey[400],
+                              color: Colors.grey[650],
                               height: 1.5,
                             ),
                           ),
@@ -344,7 +345,7 @@ AuthController _authController = AuthController();
                     Text(
                       'Dépôt',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 14,
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[800],
@@ -356,9 +357,9 @@ AuthController _authController = AuthController();
                     Text(
                       _libdep!,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 14,
                         fontFamily: 'Open Sans',
-                        color: Colors.grey[400],
+                        color: Colors.grey[650],
                         height: 1.5,
                       ),
                     ),
@@ -369,26 +370,29 @@ AuthController _authController = AuthController();
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: DataTable(
-                    columns: [
-                      DataColumn(label: Text('Famille')),
-                      DataColumn(label: Text('Code ')),
-                      DataColumn(label: Text('Libellé ')),
-                      DataColumn(label: Text('Qte_S')),
-                      DataColumn(label: Text('Ecart')),
-                    ],
-                    rows: _lignesInventaire.map(
-                          (ligne) => DataRow(
-                        cells: [
-                          DataCell(Text(ligne.famille!)),
-                          DataCell(Text(ligne.codeart!)),
-                          DataCell(Text(ligne.desart!)),
-                          DataCell(Text(ligne.qtes.toString()!)),
-                          DataCell(Text(ligne.ecartinv.toString()!)),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: [
+                        DataColumn(label: Text('Famille')),
+                        DataColumn(label: Text('Code Article ')),
+                        DataColumn(label: Text('Libellé ')),
+                        DataColumn(label: Text('Qte en stock')),
+                        DataColumn(label: Text('Ecart')),
+                      ],
+                      rows: _lignesInventaire.map(
+                            (ligne) => DataRow(
+                          cells: [
+                            DataCell(Text(ligne.famille!)),
+                            DataCell(Text(ligne.codeart!)),
+                            DataCell(Text(ligne.desart!)),
+                            DataCell(Text(ligne.qtes.toString()!)),
+                            DataCell(Text(ligne.ecartinv.toString()!)),
 
-                        ],
-                      ),
-                    ).toList(),
+                          ],
+                        ),
+                      ).toList(),
+                    ),
                   ),
                 ),
               ),

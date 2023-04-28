@@ -13,9 +13,7 @@ class LigneDepot {
     required this.numfourn,
     required this.libfourn,
     required this.datderninv,
-
     required this.codepv,
-
      this.isSelected,
 
   });

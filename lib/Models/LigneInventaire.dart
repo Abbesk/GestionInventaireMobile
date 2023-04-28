@@ -1,11 +1,9 @@
 import 'Article.dart';
 
-import 'LigneDepot.dart';
-import 'PointVente.dart';
 
 class LigneInventaire {
   LigneInventaire({
-    required this.article,
+      this.article,
     required this.NumInv,
     required this.dateInv,
     required this.codeart,
@@ -28,7 +26,7 @@ class LigneInventaire {
     required this.secart,
 
   });
-  late final Article article;
+   late final Article? article;
   late final String NumInv;
   late final String dateInv;
   late final String codeart;
@@ -53,7 +51,7 @@ class LigneInventaire {
 
 
   LigneInventaire.fromJson(Map<String, dynamic> json){
-    article = Article.fromJson(json['Article']);
+
     NumInv = json['NumInv'];
     dateInv = json['dateInv'];
     codeart = json['codeart'];
@@ -80,7 +78,7 @@ class LigneInventaire {
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['Article'] = article.toJson();
+    _data['Article'] = article?.toJson();
     _data['NumInv'] = NumInv;
     _data['dateInv'] = dateInv;
     _data['codeart'] = codeart;
@@ -89,12 +87,9 @@ class LigneInventaire {
     _data['stockinv'] = stockinv;
     _data['ecartinv'] = ecartinv;
     _data['PUART'] = PUART;
-
     _data['famille'] = famille;
     _data['libellefourn'] = libellefourn;
-
     _data['nordre'] = nordre;
-
     _data['codedep'] = codedep;
     _data['libdep'] = libdep;
     _data['codepv'] = codepv;
