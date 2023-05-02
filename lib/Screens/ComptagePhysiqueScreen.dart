@@ -15,11 +15,12 @@ import 'CreateInventaireScreen.dart';
 import 'ListeInventairesNonCloturesScreen.dart';
 import 'AuthentifierScreen.dart';
 import 'choisirSocieteScreen.dart';
+import 'package:get/get.dart';
 
 
 
 class ComptagePhysiqueScreen extends StatefulWidget {
-  final Inventaire inventaire;
+  final  Inventaire inventaire;
 
   ComptagePhysiqueScreen({required this.inventaire});
 
@@ -37,8 +38,12 @@ class _ComptagePhysiqueScreenState extends State<ComptagePhysiqueScreen> {
   String? _libdep ;
   String? _libpv ;
   String? _dateinv;
-  late List<TMPLigneDepot> _filteredTMPLignesDepot;
+
+
+
 AuthController _authController = AuthController();
+
+
   @override
   void initState() {
     super.initState();
@@ -47,12 +52,11 @@ AuthController _authController = AuthController();
     _codedep = widget.inventaire.codedep;
     _libpv=widget.inventaire.libpv;
     _libdep= widget.inventaire.libdep;
-    _tmpLignesDepot = (widget.inventaire.depot?.tmp_LignesDepot ?? []) as List<TMPLigneDepot>;
-    _filteredTMPLignesDepot =widget.inventaire.depot?.tmp_LignesDepot ?? [];
+    _tmpLignesDepot =widget.inventaire.depot?.tmp_LignesDepot ?? [];
     _dateinv= widget.inventaire.dateinv.toString();
 
-  }
-  void updateQuantity(TMPLigneDepot ligne, int newQuantity) {
+
+  }void updateQuantity(TMPLigneDepot ligne, double newQuantity) {
     setState(() {
       ligne.qteInventaire = newQuantity as double?;
     });
@@ -66,7 +70,7 @@ AuthController _authController = AuthController();
     );
 
     if (barcode != null) {
-      TMPLigneDepot? matchingLigne = _filteredTMPLignesDepot.firstWhere(
+      TMPLigneDepot? matchingLigne = _tmpLignesDepot.firstWhere(
             (ligne) => ligne.libelle == barcode,
 
       );
@@ -90,7 +94,7 @@ AuthController _authController = AuthController();
           },
         );
       } else {
-        // Si matching ligne, ouvrir une fenêtre pour actualiser la ligne
+
         TextEditingController quantityController = TextEditingController(
           text: matchingLigne.qteInventaire.toString(),
         );
@@ -112,8 +116,8 @@ AuthController _authController = AuthController();
                     ),
                     onChanged: (value) {
                       setState(() {
-                        isValidQuantity = int.tryParse(value) != null &&
-                            int.parse(value) >= 0;
+                        isValidQuantity = double.tryParse(value) != null &&
+                            double.parse(value) >= 0;
                       });
                     },
                   ),
@@ -126,14 +130,12 @@ AuthController _authController = AuthController();
                     ),
                     TextButton(
                       child: Text('Valider'),
-                      onPressed: isValidQuantity
-                          ? () {
-                        updateQuantity(matchingLigne, int.parse(quantityController.text));
-                        matchingLigne.qteInventaire =
-                            int.parse(quantityController.text) as double?;
+                      onPressed: isValidQuantity ? () {
+                        updateQuantity(matchingLigne, double.parse(quantityController.text));
+                        matchingLigne.qteInventaire = double.parse(quantityController.text) as double?;
                         Navigator.of(context).pop();
-                      }
-                          : null,
+                        setState(() {});
+                      } : null,
                     ),
                   ],
                 );
@@ -147,35 +149,6 @@ AuthController _authController = AuthController();
     return barcode;
 
   }
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      try {
-
-
-        final inventaire = Inventaire(
-          numinv: _numinv!,
-          codedep: _codedep!,
-          codepv: _codepv!,
-
-          depot: Depot(
-            Code: _codedep!,
-            codepv: _codepv!,
-            tmp_LignesDepot: _tmpLignesDepot!,
-          ),
-        );
-        await _inventaireRepository.SaisiComptage(
-          widget.inventaire.numinv!,
-          inventaire,
-        );
-
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ListeInventairesScreen()));
-      } catch (e) {
-        print(e);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -220,6 +193,7 @@ AuthController _authController = AuthController();
               );
             },
           ),
+
         ],
       ),
       drawer: Drawer(
@@ -479,145 +453,209 @@ AuthController _authController = AuthController();
 
 
                 SizedBox(height: 16.0),
-                MaterialButton(
-                  child: Text('Scan Barcode'),
-                  onPressed: () async {
-                    String? barcode = await scanBarcode();
+                Container(
+                  alignment: Alignment.center,
+                  child: MaterialButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.qr_code),
+                        SizedBox(width: 8.0),
+                        Text('Scanner code à barre'),
+                      ],
+                    ),
+                    onPressed: () async {
+                      String? barcode = await scanBarcode();
+                    },
+                  ),
+                )
+                ,
+
+
+                SizedBox(height: 16.0),
+                Center(
+                  child: Text(
+                    'Saisir les quantités pour les articles',
+                    style: TextStyle(
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.purple
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            dataRowHeight: 50.0,
+                            headingRowHeight: 60.0,
+                            columns: [
+                              DataColumn(
+                                label: Text(
+                                  'Famille',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Code article',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Désignation',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Quantité physique',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Justification',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            rows: _tmpLignesDepot.map((ligne) {
+
+                                  return DataRow(
+                                cells: [
+                                  DataCell(
+                                    Text(
+                                      ligne.famille!,
+                                      style: TextStyle(fontSize: 14.0),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Text(
+                                      ligne.codeart!,
+                                      style: TextStyle(fontSize: 14.0),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Text(
+                                      ligne.desart!,
+                                      style: TextStyle(fontSize: 14.0),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextFormField(
+                                      initialValue: ligne.qteInventaire.toString(),
+                                      keyboardType: TextInputType.number,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                      onChanged: (value) {
+                                        print("onChanged called with value: $value");
+                                        setState(() {
+                                          if (value == null || value.isEmpty) {
+                                            ligne.qteInventaire = 0;
+                                          } else {
+                                            double parsedValue = double.tryParse(value) ?? 0;
+                                            ligne.qteInventaire = (parsedValue >= 0 ? parsedValue : 0) as double?;
+                                          }
+                                        });
+                                      },
+                                      style: TextStyle(fontSize: 14.0),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    TextFormField(
+                                      initialValue: ligne.commentaire,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          ligne.commentaire = value;
+                                        });
+                                      },
+                                      style: TextStyle(fontSize: 14.0),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    );
                   },
                 ),
 
                 SizedBox(height: 16.0),
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        dataRowHeight: 50.0,
-                        headingRowHeight: 60.0,
-                        columns: [
-                          DataColumn(
-                            label: Text(
-                              'Famille',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Code Article',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Désignation',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Quantitée physique',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Justification',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                        rows: _tmpLignesDepot.map((ligne) {
-                          return DataRow(
-                            cells: [
-                              DataCell(
-                                Text(
-                                  ligne.famille!,
-                                  style: TextStyle(fontSize: 14.0),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  ligne.codeart!,
-                                  style: TextStyle(fontSize: 14.0),
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  ligne.desart!,
-                                  style: TextStyle(fontSize: 14.0),
-                                ),
-                              ),
-                              DataCell(
-                                TextFormField(
-                                  initialValue: ligne.qteInventaire.toString(),
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      if (value == null || value.isEmpty) {
-                                        ligne.qteInventaire = 0;
-                                      } else {
-                                        int parsedValue = int.tryParse(value) ?? 0;
-                                        ligne.qteInventaire = (parsedValue >= 0 ? parsedValue : 0) as double?;
-                                      }
-                                    });
-                                  },
-                                  style: TextStyle(fontSize: 14.0),
-                                ),
-                              ),
-                              DataCell(
-                                TextFormField(
-                                  initialValue: ligne.commentaire,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      ligne.commentaire = value;
-                                    });
-                                  },
-                                  style: TextStyle(fontSize: 14.0),
-                                ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-
-
-
-
-                SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {
-                    _submitForm();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ListeInventairesScreen(),
-                      ),
-                    );
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.question,
+                      animType: AnimType.bottomSlide,
+                      title: 'Confirmation',
+                      desc: 'Voulez-vous vraiment enregistrer les modifications ?',
+                      btnCancelText: 'Annuler',
+                      btnOkText: 'Confirmer',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () async {
+                        try {
+                          final inventaire = Inventaire(
+                            numinv: _numinv!,
+                            codedep: _codedep!,
+                            codepv: _codepv!,
+                            depot: Depot(
+                              Code: _codedep!,
+                              codepv: _codepv!,
+                              tmp_LignesDepot: _tmpLignesDepot!,
+                            ),
+                          );
+                          await _inventaireRepository.SaisiComptage(
+                            widget.inventaire.numinv!,
+                            inventaire,
+                          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ListeInventairesNonCloturesScreen(),
+                            ),
+                          );
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.success,
+                            animType: AnimType.bottomSlide,
+                            title: 'Succès',
+                            desc: 'Les modifications sont enregistrées  avec succès',
+                            btnOkText: 'OK',
+                            btnOkOnPress: () {},
+                          ).show();
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                    ).show();
                   },
                   child: Text('Enregistrer'),
                   style: ElevatedButton.styleFrom(

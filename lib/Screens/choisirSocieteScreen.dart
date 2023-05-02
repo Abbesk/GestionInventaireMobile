@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/UserSoc.dart';
-import 'package:inventaire_mobile/Screens/CreateInventaireScreen.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 class ChoisirSocieteScreen extends StatefulWidget {
   @override

@@ -138,7 +138,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
   @override
   void initState() {
     super.initState();
-    _inventaireRepository.fetchInventaires();
+
     _countController.text = (widget.inventaire.depot?.lignesDepot?.length).toString();
     _numinv = widget.inventaire.numinv;
     _codepv = widget.inventaire.codepv;
@@ -178,40 +178,6 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
     return countligne ;
   }
 
-
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      try {
-
-
-        final inventaire = Inventaire(
-          numinv: _numinv!,
-          codedep: _codedep!,
-          codepv: _codepv!,
-
-          depot: Depot(
-            Code: _codedep!,
-            codepv: _codepv!,
-            lignesDepot: _lignesdepot,
-          ),
-        );
-        await _inventaireRepository.selectionnerArticles(
-          widget.inventaire.numinv!,
-          inventaire,
-        );
-        // Navigate to InventaireListScreen after successful form submission
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ListeInventairesScreen(),
-          ),
-        );
-      } catch (e) {
-        print(e);
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -515,21 +481,41 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
 
 
     SizedBox(height: 16.0),
-            MaterialButton(
-              child: Text('Scan Barcode'),
-              onPressed: () async {
-                String? barcode = await scanBarcode();
-              },
-            ),
-            SizedBox(height: 16.0),
+                Container(
+                  alignment: Alignment.center,
+                  child: MaterialButton(
 
-    // Liste des articles Text
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.qr_code),
+                        SizedBox(width: 8.0),
+                    Text(
+                      "Scanner code à barre",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Open Sans',
+                        color: Colors.blueGrey,
+                        height: 1.5,
+                      ),),
+                      ],
+                    ),
+                    onPressed: () async {
+                      String? barcode = await scanBarcode();
+                    },
+                  ),
+                ),
+
+                SizedBox(height: 16.0),
+
               Center(
                 child: Text(
-                  'Liste des articles',
+                  'Sélectionner les articles',
                   style: TextStyle(
-                    fontSize: 16.0,
+                    fontSize: 18.0,
                     fontWeight: FontWeight.bold,
+                    color: Colors.teal
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -542,15 +528,51 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
-                      columnSpacing: 1,
-                      dataTextStyle: TextStyle(fontSize: 16.0),
+                      dataRowHeight: 50.0,
+                      headingRowHeight: 60.0,
                       columns: [
-                        DataColumn(label: Text('Famille')),
-                        DataColumn(label: Text('Code Article')),
-                        DataColumn(label: Text('Désignation Article')),
-                        DataColumn(label: Text('Quantité')),
+                        DataColumn(
+                          label: Text(
+                            'Famille',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Code article',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Désignation',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Quantité ',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            '',
 
-                        DataColumn(label: Text('')),
+                          ),
+                        ),
                       ],
                       rows: List<DataRow>.generate(
                         _filteredLignesDepot.length,
@@ -595,26 +617,64 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
 
 
               SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  _submitForm();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ListeInventairesNonCloturesScreen(),
+                ElevatedButton(
+                  onPressed: () {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.question,
+                      animType: AnimType.bottomSlide,
+                      title: 'Confirmation',
+                      desc: 'Voulez-vous vraiment enregistrer les modifications ?',
+                      btnCancelText: 'Annuler',
+                      btnOkText: 'Confirmer',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () async {
+                        try {
+                          final inventaire = Inventaire(
+                            numinv: _numinv!,
+                            codedep: _codedep!,
+                            codepv: _codepv!,
+                            depot: Depot(
+                              Code: _codedep!,
+                              codepv: _codepv!,
+                              lignesDepot: _lignesdepot!,
+                            ),
+                          );
+                          await _inventaireRepository.selectionnerArticles(
+                            widget.inventaire.numinv!,
+                            inventaire,
+                          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ListeInventairesNonCloturesScreen(),
+                            ),
+                          );
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.success,
+                            animType: AnimType.bottomSlide,
+                            title: 'Succès',
+                            desc: 'Articles sélectionnés avec succès',
+                            btnOkText: 'OK',
+                            btnOkOnPress: () {},
+                          ).show();
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                    ).show();
+                  },
+                  child: Text('Enregistrer'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueGrey[900],
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  );
-                },
-                child: Text('Enregistrer'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueGrey[900],
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-              ),
 
             ],
           ),

@@ -63,7 +63,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
         backgroundColor: Colors.blueGrey[900],
         title: Text(
           "Liste des inventaires clôturés",
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 14),
         ),
         actions: [
           IconButton(

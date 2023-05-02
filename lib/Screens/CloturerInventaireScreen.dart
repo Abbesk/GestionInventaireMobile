@@ -52,43 +52,6 @@ AuthController _authController = AuthController();
   }
 
 
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      try {
-        final isConfirmed = await showConfirmDialog(); // Voir la fonction showConfirmDialog() ci-dessous
-
-        if (isConfirmed) {
-          final inventaire = Inventaire(
-            numinv: _numinv!,
-            codedep: _codedep!,
-            codepv: _codepv!,
-            depot: Depot(
-              Code: _codedep!,
-              codepv: _codepv!,
-              tmp_LignesDepot: _tmpLignesDepot!,
-            ),
-          );
-
-          await _inventaireRepository.CloturerInventaire(
-            widget.inventaire.numinv!,
-            inventaire,
-          );
-
-          await showSuccessDialog(); // Voir la fonction showSuccessDialog() ci-dessous
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ListeInventairesScreen(),
-            ),
-          );
-        }
-      } catch (e) {
-        print(e);
-      }
-    }
-  }
 
   Future<bool> showConfirmDialog() async {
     final result = await AwesomeDialog(
