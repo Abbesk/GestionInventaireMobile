@@ -629,7 +629,7 @@ AuthController _authController = AuthController();
                             depot: Depot(
                               Code: _codedep!,
                               codepv: _codepv!,
-                              tmp_LignesDepot: _tmpLignesDepot!,
+                              tmp_LignesDepot: _tmpLignesDepot,
                             ),
                           );
                           await _inventaireRepository.SaisiComptage(

@@ -55,7 +55,7 @@ class AuthController extends GetxController {
 
     final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
     final url = 'https://744b-102-109-79-49.ngrok-free.app/Api/Utilisateur/ChoisirSociete?soc=';
-    final encodedUrl = Uri.parse(url + soc!); // added token to the url
+    final encodedUrl = Uri.parse(url + soc); // added token to the url
     final response = await http.post(
       encodedUrl,
       headers: {

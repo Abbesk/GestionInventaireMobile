@@ -581,7 +581,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
 
                           return DataRow(
                             cells: [
-                              DataCell(Text(ligne.famille!)),
+                              DataCell(Text(ligne.famille)),
                               DataCell(Text(ligne.codeart)),
                               DataCell(Text(ligne.desart)),
                               DataCell(Text(ligne.qteart.toString())),
@@ -637,7 +637,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
                             depot: Depot(
                               Code: _codedep!,
                               codepv: _codepv!,
-                              lignesDepot: _lignesdepot!,
+                              lignesDepot: _lignesdepot,
                             ),
                           );
                           await _inventaireRepository.selectionnerArticles(

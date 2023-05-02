@@ -383,11 +383,11 @@ AuthController _authController = AuthController();
                       rows: _lignesInventaire.map(
                             (ligne) => DataRow(
                           cells: [
-                            DataCell(Text(ligne.famille!)),
-                            DataCell(Text(ligne.codeart!)),
-                            DataCell(Text(ligne.desart!)),
-                            DataCell(Text(ligne.qtes.toString()!)),
-                            DataCell(Text(ligne.ecartinv.toString()!)),
+                            DataCell(Text(ligne.famille)),
+                            DataCell(Text(ligne.codeart)),
+                            DataCell(Text(ligne.desart)),
+                            DataCell(Text(ligne.qtes.toString())),
+                            DataCell(Text(ligne.ecartinv.toString())),
 
                           ],
                         ),

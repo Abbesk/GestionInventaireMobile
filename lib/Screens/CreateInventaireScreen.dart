@@ -58,7 +58,7 @@ late  bool theme_d ;
   void updateDepots() {
     setState(() {
       // Filter the list of available depots based on the selected point of sale
-      _deps = _deps.where((dep) => dep.codepv == _selectedPV?.Code!).toList();
+      _deps = _deps.where((dep) => dep.codepv == _selectedPV?.Code).toList();
     });
   }
 
@@ -357,7 +357,7 @@ late  bool theme_d ;
                         setState(() {
                           _selectedPV = newValue;
                           // Reset the selected depot when the point of sale changes
-                          _deps = _deps.where((dep) => dep.codepv == _selectedPV?.Code!).toList();
+                          _deps = _deps.where((dep) => dep.codepv == _selectedPV?.Code).toList();
 
                         });
                       },
@@ -405,7 +405,7 @@ late  bool theme_d ;
                         child: Text('Choisir Depot'),
                       ),
                       ..._deps
-                          .where((dep) => dep.codepv == _selectedPV?.Code!)
+                          .where((dep) => dep.codepv == _selectedPV?.Code)
                           .map<DropdownMenuItem<Depot>>((Depot dep) {
                         return DropdownMenuItem<Depot>(
                           value: dep,
