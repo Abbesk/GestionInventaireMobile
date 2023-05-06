@@ -252,7 +252,7 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
 
                 Expanded(child: Text("PV")),
 
-                Expanded(child: Text("Depot")),
+                Expanded(child: Text("Depôt")),
               ],
             ),
             subtitle: Row(
@@ -271,50 +271,81 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
             ),
             trailing: PopupMenuButton(
               itemBuilder: (BuildContext context) {
-                return <PopupMenuEntry>[
+                return <PopupMenuEntry>[      PopupMenuItem(        child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,          children: [
+                    Row(children: [
+                      Icon(Icons.add),
+                      SizedBox(width: 8),
+                      Text('Ajouter des articles'),
+                    ],
+                ),
+                ],
+                ),
+                  onTap: () async {
+                    i1 = await _inventaireController.getInventaireById(i.numinv!) as Inventaire;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SelectionnerArticleScreen(inventaire: i1),
+                      ),
+                    );
+                  },
+                ),
                   PopupMenuItem(
-                    child: IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () async {
-                        i1 = await _inventaireController.getInventaireById(i.numinv!) as Inventaire;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SelectionnerArticleScreen(inventaire: i1),
-                          ),
-                        );
-                      },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.calculate_outlined),
+                            SizedBox(width: 8),
+                            Text('Comptage physique'),
+                          ],
+                        ),
+                      ],
                     ),
+                    onTap: () async {
+                      i1 = await _inventaireController.getInventaireById(i.numinv!) as Inventaire;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ComptagePhysiqueScreen(inventaire: i1),
+                        ),
+                      );
+                    },
                   ),
                   PopupMenuItem(
-                    child: IconButton(
-                      icon: Icon(Icons.calculate_outlined),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ComptagePhysiqueScreen(inventaire: i),
-                          ),
-                        );
-                      },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.edit),
+                            SizedBox(width: 8),
+                            Text('Clôturer inventaire'),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  PopupMenuItem(
-                    child: IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CloturerInventaireScreen(inventaire: i),
-                          ),
-                        );
-                      },
-                    ),
+                    onTap: () async {
+                      i1 = await _inventaireController.getInventaireById(i.numinv!) as Inventaire;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CloturerInventaireScreen(inventaire: i1),
+                        ),
+                      );
+                    },
                   ),
                 ];
               },
+              offset: Offset(0, 20), // set the offset to center the menu
             ),
+
+
           );
         },
       ),

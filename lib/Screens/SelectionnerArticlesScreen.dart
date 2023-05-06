@@ -186,7 +186,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[900],
-        title: Text("Inventaire "+_numinv.toString()),
+        title: Text("Sélectionner articles"),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),

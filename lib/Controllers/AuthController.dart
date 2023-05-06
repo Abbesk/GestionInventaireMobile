@@ -11,15 +11,15 @@ final storage = FlutterSecureStorage();
 class AuthController extends GetxController {
   var isLoggedIn = false.obs;
 
-  Future<bool> login(String email, String password) async {
+  Future<bool> login(String codeuser, String password) async {
     try {
       final response = await http.post(
         Uri.parse('https://2162-102-170-42-157.ngrok-free.app/api/Utilisateur/login'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({'codeuser': email, 'motpasse': password}),
+        body: json.encode({'codeuser': codeuser, 'motpasse': password}),
       );
       if (response.statusCode == 200) {
-        await storage.write(key: 'codeuser', value: email);
+        await storage.write(key: 'codeuser', value: codeuser);
         final token = response.body;
         await storage.write(key: 'jwt_token', value: token);
         isLoggedIn.value = true;

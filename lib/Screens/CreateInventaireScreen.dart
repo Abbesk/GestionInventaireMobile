@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/Depot.dart';
+import 'package:inventaire_mobile/Models/UserPV.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
 import 'package:provider/provider.dart';
@@ -33,8 +34,8 @@ class _CreateInventaireScreenState extends State<CreateInventaireScreen> {
 late  bool theme_d ;
 
   List<Depot> _deps = [];
-  List<PointVente> _pvs = [];
-  PointVente? _selectedPV;
+  List<UserPV> _pvs = [];
+  UserPV? _selectedPV;
   Depot? _selectedDep ;
   bool _isLoading = true;
 
@@ -58,7 +59,7 @@ late  bool theme_d ;
   void updateDepots() {
     setState(() {
       // Filter the list of available depots based on the selected point of sale
-      _deps = _deps.where((dep) => dep.codepv == _selectedPV?.Code).toList();
+      _deps = _deps.where((dep) => dep.codepv == _selectedPV?.codepv).toList();
     });
   }
 
@@ -350,26 +351,26 @@ late  bool theme_d ;
                 Expanded(
                   child: Visibility(
                     visible: _pvs.isNotEmpty,
-                    child: DropdownButton<PointVente>(
+                    child: DropdownButton<UserPV>(
                       isExpanded: true,
                       value: _selectedPV,
-                      onChanged: (PointVente? newValue) {
+                      onChanged: (UserPV? newValue) {
                         setState(() {
                           _selectedPV = newValue;
                           // Reset the selected depot when the point of sale changes
-                          _deps = _deps.where((dep) => dep.codepv == _selectedPV?.Code).toList();
+                          _deps = _deps.where((dep) => dep.codepv == _selectedPV?.codepv).toList();
 
                         });
                       },
                       items: [
-                        DropdownMenuItem<PointVente>(
+                        DropdownMenuItem<UserPV>(
                           value: null,
                           child: Text('Choisir point de vente'),
                         ),
-                        ..._pvs.map<DropdownMenuItem<PointVente>>((PointVente pv) {
-                          return DropdownMenuItem<PointVente>(
+                        ..._pvs.map<DropdownMenuItem<UserPV>>((UserPV pv) {
+                          return DropdownMenuItem<UserPV>(
                             value: pv,
-                            child: Text(pv.Libelle!),
+                            child: Text(pv.libpv!),
                           );
                         }).toList(),
                       ],
@@ -405,7 +406,7 @@ late  bool theme_d ;
                         child: Text('Choisir Depot'),
                       ),
                       ..._deps
-                          .where((dep) => dep.codepv == _selectedPV?.Code)
+                          .where((dep) => dep.codepv == _selectedPV?.codepv)
                           .map<DropdownMenuItem<Depot>>((Depot dep) {
                         return DropdownMenuItem<Depot>(
                           value: dep,
@@ -454,7 +455,7 @@ late  bool theme_d ;
                       commentaire: _commentaireController.text,
                       cloture: '0',
                       DATEDMAJ: DateTime.now().toString(),
-                      codepv: _selectedPV?.Code,
+                      codepv: _selectedPV?.codepv,
                       codedep: _selectedDep?.Code,
                     );
                     await _inventaireController.CreerInventaire(inventaire);

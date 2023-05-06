@@ -253,7 +253,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
                 SizedBox(width: 5),
                 Expanded(child: Text("PV")),
                 SizedBox(width: 5),
-                Expanded(child: Text("Depot")),
+                Expanded(child: Text("Depôt")),
               ],
             ),
             subtitle: Row(

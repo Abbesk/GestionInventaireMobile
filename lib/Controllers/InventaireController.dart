@@ -9,6 +9,7 @@ import 'package:inventaire_mobile/Models/Depot.dart';
 import 'package:inventaire_mobile/Models/Inventaire.dart';
 import 'package:inventaire_mobile/Models/PointVente.dart';
 
+import '../Models/UserPV.dart';
 import '../Models/UserSoc.dart';
 
 
@@ -16,7 +17,7 @@ import '../Models/UserSoc.dart';
 class InventaireController extends GetxController {
 
   final _inventaires = RxList<Inventaire>([]);
-  final _pvs = RxList<PointVente>([]);
+  final _pvs = RxList<UserPV>([]);
   final _deps = RxList<Depot>([]);
   final _usersocs = RxList<UserSoc>([]);
   int? responseCode;
@@ -234,10 +235,11 @@ class InventaireController extends GetxController {
   }
 
 
-  Future<List<PointVente>> getAllPVS() async {
+  Future<List<UserPV>> getAllPVS() async {
     try {
+      String? codeuser = await storage.read(key: 'codeuser');
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://2162-102-170-42-157.ngrok-free.app/api/PointVente';
+      final url = 'https://2162-102-170-42-157.ngrok-free.app/api/UserPV/GetUtilisateurpvs?codeuser='+codeuser!;
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -251,7 +253,7 @@ class InventaireController extends GetxController {
         final Iterable jsonList = json.decode(response.body);
         _pvs.clear();
         _pvs.addAll(
-            jsonList.map((model) => PointVente.fromJson(model)));
+            jsonList.map((model) => UserPV.fromJson(model)));
         return _pvs;
       } else {
         // Handle authentication errors
@@ -267,7 +269,7 @@ class InventaireController extends GetxController {
   Future<List<Depot>> getAllDeps() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://2162-102-170-42-157.ngrok-free.app/api/Depot';
+      final url = 'https://2162-102-170-42-157.ngrok-free.app/api/Depot/GetAllDeps';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
