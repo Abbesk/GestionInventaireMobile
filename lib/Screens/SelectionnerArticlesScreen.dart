@@ -137,6 +137,7 @@ class _SelectionnerArticleScreenState extends State<SelectionnerArticleScreen> {
   }
   @override
   void initState() {
+
     super.initState();
 
     _countController.text = (widget.inventaire.depot?.lignesDepot?.length).toString();

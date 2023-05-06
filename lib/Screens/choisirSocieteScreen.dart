@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
 import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/UserSoc.dart';
+import 'package:inventaire_mobile/Screens/ListeInventairesNonCloturesScreen.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 class ChoisirSocieteScreen extends StatefulWidget {
   @override
@@ -106,7 +107,7 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    ListeInventairesScreen(),
+                                    ListeInventairesNonCloturesScreen(),
                               ),
                             );
                           } catch (e) {

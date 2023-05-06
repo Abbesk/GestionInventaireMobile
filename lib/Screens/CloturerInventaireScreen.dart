@@ -87,7 +87,7 @@ AuthController _authController = AuthController();
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[900],
-        title: Text("Inventaire "+_numinv.toString()),
+        title: Text("Clôturage"),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -482,7 +482,7 @@ AuthController _authController = AuthController();
                       },
                     ).show();
                   },
-                  child: Text('Enregistrer'),
+                  child: Text('Clôturer'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueGrey[900],
                     foregroundColor: Colors.white,

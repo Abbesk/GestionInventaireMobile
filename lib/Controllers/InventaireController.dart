@@ -41,12 +41,12 @@ class InventaireController extends GetxController {
     };
   }
 
-  //https://744b-102-109-79-49.ngrok-free.app/Api/SocieteUser/GetusersocParUser?codeuser=
+  //https://2162-102-170-42-157.ngrok-free.app/Api/SocieteUser/GetusersocParUser?codeuser=
   Future<List<UserSoc>> fetchUserSocs() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
       final codeuser = (await storage.read(key: "codeuser"));
-      final url = 'https://744b-102-109-79-49.ngrok-free.app/Api/SocieteUser/GetusersocParUser?codeuser=';
+      final url = 'https://2162-102-170-42-157.ngrok-free.app/Api/SocieteUser/GetusersocParUser?codeuser=';
       final encodedUrl = Uri.parse(url + codeuser!); // added token to the url
       final response = await http.get(
         encodedUrl,
@@ -73,11 +73,11 @@ class InventaireController extends GetxController {
     }
   }
 
-
+//http://172.20.10.5:44328/api/
   Future<List<Inventaire>> fetchInventaires() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://744b-102-109-79-49.ngrok-free.app/api/Inventaire/GetInventaires';
+      final url = 'https://2162-102-170-42-157.ngrok-free.app/api/Inventaire/GetInventaires';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -131,7 +131,7 @@ class InventaireController extends GetxController {
 
 
   Future<void> selectionnerArticles(String id, Inventaire invphysique) async {
-    final url = 'https://744b-102-109-79-49.ngrok-free.app/api/Inventaire/SelectionnerArticles?id=$id';
+    final url = 'https://2162-102-170-42-157.ngrok-free.app/api/Inventaire/SelectionnerArticles?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -151,7 +151,7 @@ class InventaireController extends GetxController {
   }
 
   Future<void> SaisiComptage(String id, Inventaire invphysique) async {
-    final url = 'https://744b-102-109-79-49.ngrok-free.app/api/Inventaire/SaisirComptagePhysique?id=$id';
+    final url = 'https://2162-102-170-42-157.ngrok-free.app/api/Inventaire/SaisirComptagePhysique?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -171,7 +171,7 @@ class InventaireController extends GetxController {
   }
 
   Future<void> CloturerInventaire(String id, Inventaire invphysique) async {
-    final url = 'https://744b-102-109-79-49.ngrok-free.app/api/Inventaire/CloturerInventaire/?id=$id';
+    final url = 'https://2162-102-170-42-157.ngrok-free.app/api/Inventaire/CloturerInventaire/?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
     final response = await http.put(
@@ -192,7 +192,7 @@ class InventaireController extends GetxController {
   Future<String> getNouveauIndex() async {
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final response = await http.get(
-      Uri.parse('https://744b-102-109-79-49.ngrok-free.app/api/Inventaire/NouveauIndex'),
+      Uri.parse('https://2162-102-170-42-157.ngrok-free.app/api/Inventaire/NouveauIndex'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -209,7 +209,7 @@ class InventaireController extends GetxController {
   }
 
   Future<void> CreerInventaire(Inventaire invphysique) async {
-    final url = 'https://744b-102-109-79-49.ngrok-free.app/api/Inventaire/Create';
+    final url = 'https://2162-102-170-42-157.ngrok-free.app/api/Inventaire/Create';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -237,7 +237,7 @@ class InventaireController extends GetxController {
   Future<List<PointVente>> getAllPVS() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://744b-102-109-79-49.ngrok-free.app/api/PointVente';
+      final url = 'https://2162-102-170-42-157.ngrok-free.app/api/PointVente';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -267,7 +267,7 @@ class InventaireController extends GetxController {
   Future<List<Depot>> getAllDeps() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://744b-102-109-79-49.ngrok-free.app/api/Depot';
+      final url = 'https://2162-102-170-42-157.ngrok-free.app/api/Depot';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -296,7 +296,7 @@ class InventaireController extends GetxController {
   }
   Future<Inventaire> getInventaireById(String id) async {
     final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-    final response = await http.get(Uri.parse('https://744b-102-109-79-49.ngrok-free.app/api/Inventaire/GetInventaireById/?id=$id') ,headers: {
+    final response = await http.get(Uri.parse('https://2162-102-170-42-157.ngrok-free.app/api/Inventaire/GetInventaireById/?id=$id') ,headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $token',
     'Access-Control-Allow-Origin': '*', // This is the cross-origin header
@@ -313,7 +313,7 @@ class InventaireController extends GetxController {
   Future<List<Inventaire>> fetchInventairesNonClotures() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://744b-102-109-79-49.ngrok-free.app/api/Inventaire/InventairesNonClotures';
+      final url = 'https://2162-102-170-42-157.ngrok-free.app/api/Inventaire/InventairesNonClotures';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
