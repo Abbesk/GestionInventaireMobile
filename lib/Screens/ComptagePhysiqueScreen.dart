@@ -230,7 +230,7 @@ class _ComptagePhysiqueScreenState extends State<ComptagePhysiqueScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             backgroundColor: Colors.blueGrey[900],
-            title: Text("Inventaire " + _numinv.toString()),
+            title: Text("Comptage physique"),
             actions: [
               IconButton(
                 icon: Icon(Icons.logout),
