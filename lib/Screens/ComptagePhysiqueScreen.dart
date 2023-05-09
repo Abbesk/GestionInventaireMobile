@@ -110,7 +110,7 @@ class _ComptagePhysiqueScreenState extends State<ComptagePhysiqueScreen> {
         );
         TextEditingController justificationController = TextEditingController(
           text: matchingLigne.commentaire ?? '',
-        ); // Initialize with matchingLigne's commentaire if available
+        );
         bool isValidQuantity = false;
 
         showDialog(
@@ -164,6 +164,7 @@ class _ComptagePhysiqueScreenState extends State<ComptagePhysiqueScreen> {
                       if (!isNewQuantity)
                         TextField(
                           controller: justificationController,
+                          keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             labelText: 'Justification',
                           ),

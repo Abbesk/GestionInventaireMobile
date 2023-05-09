@@ -4,7 +4,6 @@ class Utilisateur {
     required this.nom,
     required this.motpasse,
     required this.type,
-
     required this.socutil,
 
   });
@@ -30,7 +29,6 @@ class Utilisateur {
     _data['nom'] = nom;
     _data['motpasse'] = motpasse;
     _data['type'] = type;
-
     _data['socutil'] = socutil;
 
     return _data;

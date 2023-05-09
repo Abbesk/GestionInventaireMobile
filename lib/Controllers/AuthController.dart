@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -10,11 +8,11 @@ final storage = FlutterSecureStorage();
 
 class AuthController extends GetxController {
   var isLoggedIn = false.obs;
-
+String baseURL="http://localhost:44328/api/";
   Future<bool> login(String codeuser, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('https://2162-102-170-42-157.ngrok-free.app/api/Utilisateur/login'),
+        Uri.parse(baseURL +'Utilisateur/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'codeuser': codeuser, 'motpasse': password}),
       );
@@ -37,7 +35,7 @@ class AuthController extends GetxController {
         return false;
       }
     } catch (e) {
-      // Handle network errors
+
 
       isLoggedIn.value = false;
       return false;
@@ -54,7 +52,7 @@ class AuthController extends GetxController {
   Future<void> choisirSociete(String soc) async {
 
     final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-    final url = 'https://2162-102-170-42-157.ngrok-free.app/api/Utilisateur/ChoisirSociete?soc=';
+    final url = baseURL +'Utilisateur/ChoisirSociete?soc=';
     final encodedUrl = Uri.parse(url + soc); // added token to the url
     final response = await http.post(
       encodedUrl,
@@ -73,7 +71,7 @@ class AuthController extends GetxController {
 
 
   Future<void> logout() async {
-    final response = await http.post(Uri.parse('https://8a11-41-230-33-78.ngrok-free.app/Api/Utilisateur/Logout'));
+    final response = await http.post(Uri.parse(baseURL +'Utilisateur/Logout'));
 
     if (response.statusCode == 200) {
 

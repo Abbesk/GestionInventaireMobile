@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -17,11 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-
-
     final AuthController authController = Get.find();
-
-    final TextEditingController emailController = TextEditingController();
+    final TextEditingController codeuserController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
     return Consumer<ThemeModel>(
@@ -66,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.all(Radius.circular(20))
                           ),
                           child: TextField(
-                            controller: emailController,
+                            controller: codeuserController,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Username"
@@ -108,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           onPressed: () async {
                             bool success = await authController.login(
-                              emailController.text,
+                              codeuserController.text,
                               passwordController.text,
                             );
                             if (success) {
@@ -117,20 +115,33 @@ class _LoginPageState extends State<LoginPage> {
                                 MaterialPageRoute(builder: (context) => ChoisirSocieteScreen()),
                               );
                             }
+                            else {
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.error,
+                                animType: AnimType.bottomSlide,
+                                title: 'Erreur',
+                                desc: 'Identifiants invalides, veuillez réessayer',
+                                btnOkText: 'OK',
+                                btnOkColor: Colors.red,
+                                btnOkOnPress: () {},
+                              ).show();
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
                             child: Center(
                               child: Text(
                                 "Se connecter",
-                                style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: size.width * 0.05,),
+                                style: Theme.of(context).textTheme.headline1?.copyWith(
+                                  fontSize: size.width * 0.05,
+                                ),
                               ),
                             ),
                           ),
                         ),
 
                         SizedBox(height: 30,),
-
                       ],
                     )
                   ],

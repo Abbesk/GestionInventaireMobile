@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
@@ -7,17 +6,11 @@ import 'package:inventaire_mobile/Models/LigneInventaire.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
 import 'package:provider/provider.dart';
-
-
-
 import '../Models/Inventaire.dart';
 import 'CreateInventaireScreen.dart';
 import 'ListeInventairesNonCloturesScreen.dart';
 import 'AuthentifierScreen.dart';
 import 'choisirSocieteScreen.dart';
-
-
-
 class AfficherLignesInventaireScreen extends StatefulWidget {
   final Inventaire inventaire;
 
@@ -26,7 +19,6 @@ class AfficherLignesInventaireScreen extends StatefulWidget {
   @override
   _AfficherLignesInventaireScreenState createState() => _AfficherLignesInventaireScreenState();
 }
-
 class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventaireScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late List<LigneInventaire> _lignesInventaire;
@@ -46,10 +38,6 @@ AuthController _authController = AuthController();
     _dateinv = widget.inventaire.dateinv.toString();
     _datecloture= widget.inventaire.datecloture.toString();
   }
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,7 +175,6 @@ AuthController _authController = AuthController();
                     MaterialPageRoute(builder: (context) => CreateInventaireScreen()),);
                 },
               ),
-
               ListTile(
                 leading: Icon(
                   Icons.account_balance_sharp,
@@ -204,17 +191,14 @@ AuthController _authController = AuthController();
                     MaterialPageRoute(builder: (context) => ChoisirSocieteScreen()),);
                 },
               ),
-
             ],
           ),
         ),
       ),
-
       body: Form(
         key: _formKey,
         child: Padding(
           padding: EdgeInsets.all(16.0),
-
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -375,7 +359,7 @@ AuthController _authController = AuthController();
                     child: DataTable(
                       columns: [
                         DataColumn(label: Text('Famille')),
-                        DataColumn(label: Text('Code Article ')),
+                        DataColumn(label: Text('Code article ')),
                         DataColumn(label: Text('Libellé ')),
                         DataColumn(label: Text('Qte en stock')),
                         DataColumn(label: Text('Ecart')),
@@ -388,7 +372,6 @@ AuthController _authController = AuthController();
                             DataCell(Text(ligne.desart)),
                             DataCell(Text(ligne.qtes.toString())),
                             DataCell(Text(ligne.ecartinv.toString())),
-
                           ],
                         ),
                       ).toList(),
@@ -396,12 +379,6 @@ AuthController _authController = AuthController();
                   ),
                 ),
               ),
-
-
-
-
-
-
             ],
           ),
         ),

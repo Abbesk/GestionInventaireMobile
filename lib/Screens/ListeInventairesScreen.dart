@@ -226,6 +226,7 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
             ],
           ),
         ),
+
       ),
 
 
@@ -291,6 +292,12 @@ class _ListeInventairesScreenState extends State<ListeInventairesScreen> {
             ),
           );
         },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text('Footer'),
+        ),
       ),
     );
 
