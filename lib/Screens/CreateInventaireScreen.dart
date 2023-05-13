@@ -7,6 +7,7 @@ import 'package:inventaire_mobile/Models/UserPV.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Controllers/AuthController.dart';
 import '../Models/Inventaire.dart';
@@ -38,6 +39,10 @@ late  bool theme_d ;
   UserPV? _selectedPV;
   Depot? _selectedDep ;
   bool _isLoading = true;
+  Future<String?> _getUserSoc() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? societe=  prefs.getString('soc');
+    return societe;}
 
   @override
   void dispose() {
@@ -142,13 +147,27 @@ late  bool theme_d ;
                 child: Column(
                   children: [
                     SizedBox(height: 20),
-                    Text(
-                      'Inventaire',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    FutureBuilder<String?>(
+                      future: _getUserSoc(),
+                      builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (snapshot.hasData) {
+                          String? soc = snapshot.data;
+                          return Text(
+                            'Inventaire pour la société $soc',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        } else {
+                          return Text('Erreur lors de la récupération de la société');
+                        }
+                      },
                     ),
                     SizedBox(height: 20),
                     Expanded(

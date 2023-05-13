@@ -8,11 +8,13 @@ final storage = FlutterSecureStorage();
 
 class AuthController extends GetxController {
   var isLoggedIn = false.obs;
-String baseURL="http://localhost:44328/api/";
+String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
+
+
   Future<bool> login(String codeuser, String password) async {
     try {
       final response = await http.post(
-        Uri.parse(baseURL +'Utilisateur/login'),
+        Uri.parse('https://3204-102-109-204-239.ngrok-free.app/api/Utilisateur/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'codeuser': codeuser, 'motpasse': password}),
       );
@@ -42,7 +44,24 @@ String baseURL="http://localhost:44328/api/";
     }
   }
 
+  Future<String> getRole() async {
+    final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
+    final response = await http.get(
+      Uri.parse('https://3204-102-109-204-239.ngrok-free.app/api/Utilisateur/getRole'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Access-Control-Allow-Origin': '*', // This is the cross-origin header
+      },);
 
+    if (response.statusCode == 200) {
+      // the API call was successful
+      return json.decode(response.body);
+    } else {
+      // the API call failed
+      throw Exception('Failed to load nouveau index');
+    }
+  }
 
   Future<void> signOut() async {
     isLoggedIn.value = false;
@@ -52,7 +71,7 @@ String baseURL="http://localhost:44328/api/";
   Future<void> choisirSociete(String soc) async {
 
     final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-    final url = baseURL +'Utilisateur/ChoisirSociete?soc=';
+    final url = 'https://3204-102-109-204-239.ngrok-free.app/api/Utilisateur/ChoisirSociete?soc=';
     final encodedUrl = Uri.parse(url + soc); // added token to the url
     final response = await http.post(
       encodedUrl,
@@ -63,7 +82,7 @@ String baseURL="http://localhost:44328/api/";
       },
     );
     if (response.statusCode == 200) {
-      // handle successful response
+      await storage.write(key: 'societe', value: soc);
     } else {
       print('Failed to fetch inventaires due to unexpected error. Reason: ');
     }
@@ -71,7 +90,7 @@ String baseURL="http://localhost:44328/api/";
 
 
   Future<void> logout() async {
-    final response = await http.post(Uri.parse(baseURL +'Utilisateur/Logout'));
+    final response = await http.post(Uri.parse('https://3204-102-109-204-239.ngrok-free.app/api/Utilisateur/Logout'));
 
     if (response.statusCode == 200) {
 

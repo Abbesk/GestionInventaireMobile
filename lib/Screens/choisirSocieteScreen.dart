@@ -4,6 +4,7 @@ import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/UserSoc.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesNonCloturesScreen.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class ChoisirSocieteScreen extends StatefulWidget {
   @override
   State<ChoisirSocieteScreen> createState() => _ChoisirSocieteScreen();
@@ -13,10 +14,17 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
   final AuthController _authController = AuthController();
   List<UserSoc> _societes = [];
   bool _isLoading = false;
+  late SharedPreferences prefs;
   @override
   void initState() {
     super.initState();
     _fetchSocietes();
+    SharedPreferences.getInstance().then((value) {
+      setState(() {
+        prefs = value;
+      });
+    });
+
   }
   _fetchSocietes() async {
     setState(() {
@@ -103,6 +111,7 @@ class _ChoisirSocieteScreen extends State<ChoisirSocieteScreen> {
                           String soc = article.societe; // or use your own logic to get the selected 'soc' value
                           try {
                             await _authController.choisirSociete(soc);
+                            await prefs.setString('soc', soc);
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(

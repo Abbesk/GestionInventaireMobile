@@ -10,6 +10,7 @@ import 'package:inventaire_mobile/Screens/AuthentifierScreen.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'CreateInventaireScreen.dart';
 import 'ListeInventairesScreen.dart';
 import 'choisirSocieteScreen.dart';
@@ -23,12 +24,19 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
   final InventaireController _inventaireController = InventaireController();
   final AuthController _authController= AuthController() ;
   List<Inventaire> _inventaires = [];
+  String _role ="";
+  bool superviseur=true;
+  Future<String?> _getUserSoc() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? societe=  prefs.getString('soc');
+    return societe;}
   late Inventaire i1 ;
   bool _isLoading = false;
   @override
   void initState() {
     super.initState();
     _fetchInvs();
+
 
   }
 
@@ -38,9 +46,14 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
     });
     try {
       final List<Inventaire> inventaires = await _inventaireController.fetchInventairesNonClotures() ;
+      final String role = await _authController.getRole();
       setState(() {
         _isLoading = false;
         _inventaires = inventaires;
+        _role=role ;
+        if(_role.toLowerCase()=="utilisateur"){
+          superviseur=false;
+        }
       });
     } catch (e) {
       setState(() {
@@ -115,13 +128,27 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
                 child: Column(
                   children: [
                     SizedBox(height: 20),
-                    Text(
-                      'Inventaire',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    FutureBuilder<String?>(
+                      future: _getUserSoc(),
+                      builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (snapshot.hasData) {
+                          String? soc = snapshot.data;
+                          return Text(
+                            'Inventaire pour la société $soc',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        } else {
+                          return Text('Erreur lors de la récupération de la société');
+                        }
+                      },
                     ),
                     SizedBox(height: 20),
                     Expanded(
@@ -146,33 +173,38 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
                   ],
                 ),
               ),
-              ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.list,
-                      color: Colors.blueGrey[900],
-                      size: 12.0,
-                    ),
-                  ),
-                ),
-                title: Text(
-                  'Liste des inventaires clôturés',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () {
-                  // Navigate to the main page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ListeInventairesScreen()),);
-                },
+        Visibility(
+          visible: superviseur,
+          child: ListTile(
+            leading: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
               ),
-              ListTile(
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.list,
+                  color: Colors.blueGrey[900],
+                  size: 12.0,
+                ),
+              ),
+            ),
+            title: Text(
+              'Liste des inventaires clôturés',
+              style: TextStyle(color: Colors.white),
+            ),
+            onTap: () {
+              // Navigate to the main page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ListeInventairesScreen()),
+              );
+            },
+          ),
+        ),
+
+        ListTile(
                 leading: Icon(
                   Icons.list_alt,
                   color: Colors.white,
@@ -188,21 +220,24 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
                     MaterialPageRoute(builder: (context) => ListeInventairesNonCloturesScreen()),);
                 },
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.add,
-                  color: Colors.white,
+              Visibility(
+                visible: superviseur,
+                child: ListTile(
+                  leading: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    'Créer un inventaire',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onTap: () {
+                    // Navigate to the validated orders page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateInventaireScreen()),);
+                  },
                 ),
-                title: Text(
-                  'Créer un inventaire',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () {
-                  // Navigate to the validated orders page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CreateInventaireScreen()),);
-                },
               ),
 
               ListTile(
@@ -271,7 +306,10 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
             ),
             trailing: PopupMenuButton(
               itemBuilder: (BuildContext context) {
-                return <PopupMenuEntry>[      PopupMenuItem(        child: Column(
+                return <PopupMenuEntry>[
+                  PopupMenuItem(
+
+                    child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,          children: [
                     Row(children: [
@@ -282,6 +320,7 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
                 ),
                 ],
                 ),
+                  enabled: superviseur,
                   onTap: () async {
                     i1 = await _inventaireController.getInventaireById(i.numinv!) as Inventaire;
                     Navigator.push(
@@ -330,6 +369,7 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
                         ),
                       ],
                     ),
+                    enabled: superviseur,
                     onTap: () async {
                       i1 = await _inventaireController.getInventaireById(i.numinv!) as Inventaire;
                       Navigator.push(

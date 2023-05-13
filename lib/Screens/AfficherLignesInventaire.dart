@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:inventaire_mobile/Controllers/AuthController.dart';
-import 'package:inventaire_mobile/Controllers/InventaireController.dart';
 import 'package:inventaire_mobile/Models/LigneInventaire.dart';
 import 'package:inventaire_mobile/Screens/ListeInventairesScreen.dart';
 import 'package:inventaire_mobile/Screens/themes/theme_model.dart';
@@ -27,9 +26,10 @@ class _AfficherLignesInventaireScreenState extends State<AfficherLignesInventair
   String? _libdep;
   String? _datecloture;
   String? _dateinv;
+
 AuthController _authController = AuthController();
   @override
-  void initState() {
+  void initState()  {
     super.initState();
     _numinv = widget.inventaire.numinv;
     _libdep=widget.inventaire.libdep;
@@ -87,7 +87,7 @@ AuthController _authController = AuthController();
                   children: [
                     SizedBox(height: 20),
                     Text(
-                      'Inventaire',
+                      'inventaire',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -309,7 +309,7 @@ AuthController _authController = AuthController();
                           Text(
                             DateFormat('dd/MM/yyyy').format(DateTime.parse(_datecloture!)),
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 14,
                               fontFamily: 'Open Sans',
                               color: Colors.grey[650],
                               height: 1.5,
