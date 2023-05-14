@@ -9,7 +9,7 @@ import 'Screens/themes/theme_model.dart';
 
 void main() {
   Get.put(AuthController());
-  Get.put(InventaireController());
+
   runApp(
       ChangeNotifierProvider(
           create: (_) => ThemeModel(),

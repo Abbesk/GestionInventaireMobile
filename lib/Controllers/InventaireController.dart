@@ -16,7 +16,7 @@ class InventaireController extends GetxController {
   final _deps = RxList<Depot>([]);
   final _usersocs = RxList<UserSoc>([]);
   int? responseCode;
-String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
+String baseURL="http://localhost:44328/api/";
   RxList<Inventaire> get inventaires => _inventaires;
 
   RxList<UserSoc> get usersocs => _usersocs;
@@ -42,7 +42,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
       final codeuser = (await storage.read(key: "codeuser"));
-      final url = 'https://3204-102-109-204-239.ngrok-free.app/api/SocieteUser/GetusersocParUser?codeuser=';
+      final url = 'http://localhost:44328/api/SocieteUser/GetusersocParUser?codeuser=';
       final encodedUrl = Uri.parse(url + codeuser!); // added token to the url
       final response = await http.get(
         encodedUrl,
@@ -73,7 +73,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
   Future<List<Inventaire>> fetchInventaires() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://3204-102-109-204-239.ngrok-free.app/api/Inventaire/GetInventaires';
+      final url = 'http://localhost:44328/api/Inventaire/GetInventaires';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -127,7 +127,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
 
 
   Future<void> selectionnerArticles(String id, Inventaire invphysique) async {
-    final url ='https://3204-102-109-204-239.ngrok-free.app/api/Inventaire/SelectionnerArticles?id=$id';
+    final url ='http://localhost:44328/api/Inventaire/SelectionnerArticles?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -147,7 +147,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
   }
 
   Future<void> SaisiComptage(String id, Inventaire invphysique) async {
-    final url = 'https://3204-102-109-204-239.ngrok-free.app/api/Inventaire/SaisirComptagePhysique?id=$id';
+    final url = 'http://localhost:44328/api/Inventaire/SaisirComptagePhysique?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -167,7 +167,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
   }
 
   Future<void> CloturerInventaire(String id, Inventaire invphysique) async {
-    final url = 'https://3204-102-109-204-239.ngrok-free.app/api/Inventaire/CloturerInventaire/?id=$id';
+    final url = 'http://localhost:44328/api/Inventaire/CloturerInventaire/?id=$id';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
     final response = await http.put(
@@ -188,7 +188,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
   Future<String> getNouveauIndex() async {
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final response = await http.get(
-      Uri.parse('https://3204-102-109-204-239.ngrok-free.app/api/Inventaire/NouveauIndex'),
+      Uri.parse('http://localhost:44328/api/Inventaire/NouveauIndex'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -205,7 +205,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
   }
 
   Future<void> CreerInventaire(Inventaire invphysique) async {
-    final url = 'https://3204-102-109-204-239.ngrok-free.app/api/Inventaire/Create';
+    final url = 'http://localhost:44328/api/Inventaire/Create';
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final encodedUrl = Uri.parse(url);
 
@@ -234,7 +234,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
     try {
       String? codeuser = await storage.read(key: 'codeuser');
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://3204-102-109-204-239.ngrok-free.app/api/UserPV/GetUtilisateurpvs?codeuser='+codeuser!;
+      final url = 'http://localhost:44328/api/UserPV/GetUtilisateurpvs?codeuser='+codeuser!;
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -264,7 +264,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
   Future<List<Depot>> getAllDeps() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://3204-102-109-204-239.ngrok-free.app/api/Depot/GetAllDeps';
+      final url = 'http://localhost:44328/api/Depot/GetAllDeps';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),
@@ -293,7 +293,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
   }
   Future<Inventaire> getInventaireById(String id) async {
     final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-    final response = await http.get(Uri.parse('https://3204-102-109-204-239.ngrok-free.app/api/Inventaire/GetInventaireById/?id=$id') ,headers: {
+    final response = await http.get(Uri.parse('http://localhost:44328/api/Inventaire/GetInventaireById/?id=$id') ,headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $token',
     'Access-Control-Allow-Origin': '*', // This is the cross-origin header
@@ -310,7 +310,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
   Future<List<Inventaire>> fetchInventairesNonClotures() async {
     try {
       final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-      final url = 'https://3204-102-109-204-239.ngrok-free.app/api/Inventaire/InventairesNonClotures';
+      final url = 'http://localhost:44328/api/Inventaire/InventairesNonClotures';
       final encodedUrl = Uri.encodeFull(url);
       final response = await http.get(
         Uri.parse(encodedUrl),

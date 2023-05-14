@@ -54,6 +54,8 @@ class _ListeInventairesNonCloturesScreenState extends State<ListeInventairesNonC
         if(_role.toLowerCase()=="utilisateur"){
           superviseur=false;
         }
+        print("ok");
+        print(_role);
       });
     } catch (e) {
       setState(() {

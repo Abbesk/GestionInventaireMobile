@@ -8,13 +8,13 @@ final storage = FlutterSecureStorage();
 
 class AuthController extends GetxController {
   var isLoggedIn = false.obs;
-String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
+String baseURL="http://localhost:44328/api/";
 
 
   Future<bool> login(String codeuser, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('https://3204-102-109-204-239.ngrok-free.app/api/Utilisateur/login'),
+        Uri.parse('http://localhost:44328/api/Utilisateur/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'codeuser': codeuser, 'motpasse': password}),
       );
@@ -47,7 +47,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
   Future<String> getRole() async {
     final token = (await storage.read(key: "jwt_token"))!.replaceAll('"', '');
     final response = await http.get(
-      Uri.parse('https://3204-102-109-204-239.ngrok-free.app/api/Utilisateur/getRole'),
+      Uri.parse('http://localhost:44328/api/Utilisateur/getRole'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -71,7 +71,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
   Future<void> choisirSociete(String soc) async {
 
     final token = (await storage.read(key: "jwt_token"))?.replaceAll('"', '');
-    final url = 'https://3204-102-109-204-239.ngrok-free.app/api/Utilisateur/ChoisirSociete?soc=';
+    final url = 'http://localhost:44328/api/Utilisateur/ChoisirSociete?soc=';
     final encodedUrl = Uri.parse(url + soc); // added token to the url
     final response = await http.post(
       encodedUrl,
@@ -90,7 +90,7 @@ String baseURL="https://3204-102-109-204-239.ngrok-free.app/api/";
 
 
   Future<void> logout() async {
-    final response = await http.post(Uri.parse('https://3204-102-109-204-239.ngrok-free.app/api/Utilisateur/Logout'));
+    final response = await http.post(Uri.parse('http://localhost:44328/api/Utilisateur/Logout'));
 
     if (response.statusCode == 200) {
 
